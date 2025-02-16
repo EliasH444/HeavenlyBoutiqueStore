@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Welcome to Our Wedding Store";
+}
+
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="jumbotron text-center" style="background-color: #f8bbd0; padding: 4rem 2rem; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <h1 class="display-4" style="color: #1a237e; font-weight: 700; font-size: 3.5rem;">Find Your Perfect Dress</h1>
+        <p class="lead" style="color: #4a148c; font-size: 1.25rem;">Discover a wide range of bridal and evening dresses tailored for your special day.</p>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-lg" style="background-color: #e91e63; color: white; padding: 1rem 2rem; font-size: 1.2rem; border-radius: 50px;">Shop Now</a>
+    </div>
+
+    <!-- Categories Section -->
+    <h2 class="text-center mt-5" style="color: #1a237e; font-weight: 600; font-size: 2.5rem;">Shop by Category</h2>
+    <div class="row mt-4">
+        <div class="col-md-3 mb-3">
+            <a href="#" class="list-group-item list-group-item-action" style="background-color: #e91e63; color: white; border-radius: 8px; padding: 1.5rem 0; text-align: center; font-size: 1.2rem;">Bridal Dresses</a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="#" class="list-group-item list-group-item-action" style="background-color: #e91e63; color: white; border-radius: 8px; padding: 1.5rem 0; text-align: center; font-size: 1.2rem;">Bridesmaid Dresses</a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="#" class="list-group-item list-group-item-action" style="background-color: #e91e63; color: white; border-radius: 8px; padding: 1.5rem 0; text-align: center; font-size: 1.2rem;">Evening Gowns</a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="#" class="list-group-item list-group-item-action" style="background-color: #e91e63; color: white; border-radius: 8px; padding: 1.5rem 0; text-align: center; font-size: 1.2rem;">Accessories</a>
+        </div>
+    </div>
+
+    <!-- Best-Selling Dresses -->
+    <h2 class="text-center mt-5" style="color: #1a237e; font-weight: 600; font-size: 2.5rem;">Best Sellers</h2>
+    <div class="row mt-4">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+                <img src="/images/sample1.jpg" class="card-img-top" alt="Best Seller 1" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                <div class="card-body text-center" style="background-color: #f8bbd0; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                    <h5 class="card-title" style="color: #1a237e; font-weight: 600;">Elegant White Gown</h5>
+                    <p class="card-text" style="color: #4a148c; font-size: 1.2rem;">$499</p>
+                    <a href="#" class="btn" style="background-color: #e91e63; color: white; font-size: 1rem; padding: 0.75rem 1.5rem; border-radius: 50px;">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+                <img src="/images/sample2.jpg" class="card-img-top" alt="Best Seller 2" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                <div class="card-body text-center" style="background-color: #f8bbd0; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                    <h5 class="card-title" style="color: #1a237e; font-weight: 600;">Royal Blue Dress</h5>
+                    <p class="card-text" style="color: #4a148c; font-size: 1.2rem;">$349</p>
+                    <a href="#" class="btn" style="background-color: #e91e63; color: white; font-size: 1rem; padding: 0.75rem 1.5rem; border-radius: 50px;">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+                <img src="/images/sample3.jpg" class="card-img-top" alt="Best Seller 3" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                <div class="card-body text-center" style="background-color: #f8bbd0; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                    <h5 class="card-title" style="color: #1a237e; font-weight: 600;">Romantic Lace Dress</h5>
+                    <p class="card-text" style="color: #4a148c; font-size: 1.2rem;">$599</p>
+                    <a href="#" class="btn" style="background-color: #e91e63; color: white; font-size: 1rem; padding: 0.75rem 1.5rem; border-radius: 50px;">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call-to-Action -->
+    <div class="text-center mt-5">
+        <h3 style="color: #1a237e; font-weight: 600; font-size: 2.5rem;">Get Ready for Your Big Day!</h3>
+        <p style="color: #4a148c; font-size: 1.25rem;">Explore our latest collection of wedding dresses and accessories.</p>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-lg" style="background-color: #e91e63; color: white; padding: 1rem 2rem; font-size: 1.2rem; border-radius: 50px;">Browse Collection</a>
+    </div>
+</div>
