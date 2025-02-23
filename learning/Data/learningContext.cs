@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using learning.Models;
 
 namespace learning.Data
 {
-    public class learningContext : DbContext
+    public class learningContext : IdentityDbContext<ApplicationUser>  // ✅ Correct inheritance
     {
-        public learningContext (DbContextOptions<learningContext> options)
+        public learningContext(DbContextOptions<learningContext> options)
             : base(options)
         {
         }
-
-        public DbSet<learning.Models.Product> Product { get; set; } = default!;
+        //add to
+        // Ensure this model exists in your project, otherwise comment it out or remove it
+        public DbSet<Product> Product { get; set; } = default!;
     }
 }

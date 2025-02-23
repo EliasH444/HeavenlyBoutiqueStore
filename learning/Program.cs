@@ -1,20 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using learning.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<learningContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("learningContext") ?? throw new InvalidOperationException("Connection string 'learningContext' not found.")));
+using learning.Models;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure database connection
+builder.Services.AddDbContext<learningContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("learningContext")
+    ?? throw new InvalidOperationException("Connection string 'learningContext' not found.")));
+
+// Add Identity services
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<learningContext>()
+    .AddDefaultTokenProviders();
+
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -23,6 +32,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Enable authentication and authorization middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
