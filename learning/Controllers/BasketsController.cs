@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using learning.Data;
 using learning.Models;
+using learning.Services;
 
 namespace learning.Controllers
 {
@@ -19,119 +20,83 @@ namespace learning.Controllers
             _context = context;
         }
 
-        // GET: Baskets
+        // View basket
         public async Task<IActionResult> ViewBasket()
         {
-            //get userID from teh userservcie
-            //check if the ID that we collected is empty.If empty nredirect to login page
+            var userId = _userService.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
 
+            var basket = await _context.Baskets
+                .Include(b => b.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(b => b.UserId == userId);
 
-            return View(await _context.Basket.ToListAsync());
-        }
-
-        
-
-        
-
-        // POST: Baskets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BasketID,UserId")] Basket basket)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(basket);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             return View(basket);
         }
-
-        // GET: Baskets/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // Add product to basket
+        public async Task<IActionResult> AddToBasket(int productId, int quantity)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var userId = _userService.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
 
-            var basket = await _context.Basket.FindAsync(id);
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null || quantity <= 0 || product.StockQuantity < quantity)
+                return BadRequest("Invalid product or insufficient stock.");
+
+            var basket = await _context.Baskets
+                .Include(b => b.Items)
+                .FirstOrDefaultAsync(b => b.UserId == userId);
+
             if (basket == null)
             {
-                return NotFound();
-            }
-            return View(basket);
-        }
-
-        // POST: Baskets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BasketID,UserId")] Basket basket)
-        {
-            if (id != basket.BasketID)
-            {
-                return NotFound();
+                basket = new Basket { UserId = userId };
+                _context.Baskets.Add(basket);
             }
 
-            if (ModelState.IsValid)
+            var basketItem = basket.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (basketItem != null)
             {
-                try
+                basketItem.Quantity += quantity;
+            }
+            else
+            {
+                basket.Items.Add(new BasketItem
                 {
-                    _context.Update(basket);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BasketExists(basket.BasketID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(basket);
-        }
-
-        // GET: Baskets/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                    ProductId = productId,
+                    Quantity = quantity
+                });
             }
 
-            var basket = await _context.Basket
-                .FirstOrDefaultAsync(m => m.BasketID == id);
-            if (basket == null)
-            {
-                return NotFound();
-            }
-
-            return View(basket);
-        }
-
-        // POST: Baskets/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var basket = await _context.Basket.FindAsync(id);
-            if (basket != null)
-            {
-                _context.Basket.Remove(basket);
-            }
-
+            product.StockQuantity -= quantity;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("ViewBasket");
         }
+
+        // Remove item from basket
+        public async Task<IActionResult> RemoveFromBasket(int basketItemId)
+        {
+            var userId = _userService.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
+
+            var basketItem = await _context.BasketItems
+                .Include(i => i.Basket)
+                .FirstOrDefaultAsync(i => i.BasketItemId == basketItemId && i.Basket.UserId == userId);
+
+            if (basketItem == null)
+                return NotFound();
+
+            _context.BasketItems.Remove(basketItem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ViewBasket");
+        }
+
+
+
 
         private bool BasketExists(int id)
         {
