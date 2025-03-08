@@ -1,0 +1,58 @@
+﻿@model learning.Models.Register
+
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "_Layout"; // Use the shared layout
+}
+
+<style>
+    .signup-container {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto; /*Center the container */
+       
+    }
+
+    .btn-gold {
+        background-color: #C19A6B;
+        border-color: #C19A6B;
+        color: white;
+    }
+
+        .btn-gold:hover {
+            background-color: #B8865B;
+            border-color: #B8865B;
+        }
+
+    
+</style>
+
+<div class="signup-container">
+    <h2 class="text-center mb-4">Create Your Account</h2>
+    <p class="text-center text-muted mb-4">Join us to find the perfect wedding dress.</p>
+    <form asp-action="SignUp" method="post">
+        <div class="mb-3">
+            <label for="FullName" class="form-label">Full Name</label>
+            <input asp-for="FullName" type="text" class="form-control" id="FullName" required>
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control" id="Email" required>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" id="Password" required>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-gold w-100">Register</button>
+    </form>
+    <p class="text-center mt-3">
+        Already have an account? <a href="/Account/Login" class="text-decoration-none" style="color: #C19A6B;">Login</a>
+    </p>
+</div>
