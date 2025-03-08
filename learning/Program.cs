@@ -18,7 +18,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 // Add services to the container
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -40,8 +41,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<UserService>();
+
 
 
 app.Run();
