@@ -14,6 +14,8 @@ namespace learning.Data
         //add to
         // Ensure this model exists in your project, otherwise comment it out or remove it
         public DbSet<Product> Product { get; set; } = default!;
-        public DbSet<learning.Models.Basket> Basket { get; set; } = default!;
+        public DbSet<Basket> Basket { get; set; } = default!;
+        public DbSet<BasketItem> BasketItem { get; set; } = default!;
+
     }
 }

@@ -14,10 +14,12 @@ namespace learning.Controllers
     public class BasketsController : Controller
     {
         private readonly learningContext _context;
+        IUserService _userService;
 
-        public BasketsController(learningContext context)
+        public BasketsController(learningContext context, IUserService UserService)
         {
             _context = context;
+            _userService = UserService;
         }
 
         // View basket
@@ -27,7 +29,7 @@ namespace learning.Controllers
             if (string.IsNullOrEmpty(userId))
                 return RedirectToAction("Login", "Account");
 
-            var basket = await _context.Baskets
+            var basket = await _context.Basket
                 .Include(b => b.Items)
                 .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync(b => b.UserId == userId);
@@ -41,18 +43,18 @@ namespace learning.Controllers
             if (string.IsNullOrEmpty(userId))
                 return RedirectToAction("Login", "Account");
 
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Product.FindAsync(productId);
             if (product == null || quantity <= 0 || product.StockQuantity < quantity)
                 return BadRequest("Invalid product or insufficient stock.");
 
-            var basket = await _context.Baskets
+            var basket = await _context.Basket
                 .Include(b => b.Items)
                 .FirstOrDefaultAsync(b => b.UserId == userId);
 
             if (basket == null)
             {
                 basket = new Basket { UserId = userId };
-                _context.Baskets.Add(basket);
+                _context.Basket.Add(basket);
             }
 
             var basketItem = basket.Items.FirstOrDefault(i => i.ProductId == productId);
@@ -82,14 +84,14 @@ namespace learning.Controllers
             if (string.IsNullOrEmpty(userId))
                 return RedirectToAction("Login", "Account");
 
-            var basketItem = await _context.BasketItems
+            var basketItem = await _context.BasketItem
                 .Include(i => i.Basket)
                 .FirstOrDefaultAsync(i => i.BasketItemId == basketItemId && i.Basket.UserId == userId);
 
             if (basketItem == null)
                 return NotFound();
 
-            _context.BasketItems.Remove(basketItem);
+            _context.BasketItem.Remove(basketItem);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("ViewBasket");
