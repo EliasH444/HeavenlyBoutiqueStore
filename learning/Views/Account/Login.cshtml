@@ -1,0 +1,53 @@
+﻿@model learning.Models.Login
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+
+    
+    <style>
+        
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .btn-gold {
+            background-color: #C19A6B;
+            border-color: #C19A6B;
+            color: white;
+        }
+
+            .btn-gold:hover {
+                background-color: #B8865B;
+                border-color: #B8865B;
+            }
+    </style>
+
+
+    <div class="login-container">
+        <h2 class="text-center mb-4">Login</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="Email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="Email" name="Email" required>
+            </div>
+            <div class="mb-3">
+                <label for="Password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="Password" name="Password" required>
+            </div>
+            <button type="submit" class="btn btn-gold w-100">Login</button>
+        </form>
+        <p class="text-center mt-3">
+            Don't have an account? <a href="/Account/SignUp" class="text-decoration-none" style="color: #C19A6B;">Sign Up</a>
+        </p>
+    </div>
+
