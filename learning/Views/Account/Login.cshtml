@@ -20,6 +20,7 @@
             margin: 0 auto;
         }
 
+
         .btn-gold {
             background-color: #C19A6B;
             border-color: #C19A6B;
@@ -30,9 +31,13 @@
                 background-color: #B8865B;
                 border-color: #B8865B;
             }
+
+
+
     </style>
 
 
+<div class="login-wrapper">
     <div class="login-container">
         <h2 class="text-center mb-4">Login</h2>
         <form method="post">
@@ -49,5 +54,9 @@
         <p class="text-center mt-3">
             Don't have an account? <a href="/Account/SignUp" class="text-decoration-none" style="color: #C19A6B;">Sign Up</a>
         </p>
+        <a asp-controller="Account" asp-action="ForgotPassword">Forgot your password?</a>
+
     </div>
+</div>
+
 

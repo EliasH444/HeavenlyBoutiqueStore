@@ -1,0 +1,55 @@
+﻿@model List<learning.Models.CartItem>
+@{
+    ViewBag.Title = "Your Cart";
+}
+
+<h2>Your Cart</h2>
+
+@if (!Model.Any())
+{
+    <p>Your cart is empty.</p>
+    <a href="/Products">Start Shopping</a>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price (£)</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+
+                    <td>
+                        <form method="post" asp-action="Update">
+                            <input type="hidden" name="id" value="@item.ProductId" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" style="width:60px;" />
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+
+                    <td>@(item.Price* item.Quantity)</td>
+
+                    <td>
+                        <a class="btn btn-danger" href="/Cart/Remove/@item.ProductId">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Total: £@ViewBag.Total</h3>
+
+    <a class="btn btn-warning" href="/Cart/Clear">Clear Cart</a>
+    <a class="btn btn-success" href="/Payment/Checkout">Checkout</a>
+}

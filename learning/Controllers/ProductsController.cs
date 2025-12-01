@@ -53,15 +53,16 @@ namespace learning.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,StockQuantity,CreatedAt")] Product product)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromBody] Product product)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            //}
+            Console.WriteLine(product);
             return View(product);
         }
 
@@ -136,6 +137,7 @@ namespace learning.Controllers
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
+        
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

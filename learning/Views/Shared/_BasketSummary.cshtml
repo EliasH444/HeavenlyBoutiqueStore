@@ -1,0 +1,36 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using System.Linq
+@inject learning.Data.learningContext _context
+@inject learning.Services.IUserService UserService
+
+@{
+    var userId = UserService.GetUserId();
+    var itemCount = 0;
+
+    if (!string.IsNullOrEmpty(userId))
+    {
+        var basket = await _context.Basket
+            .Include(b => b.Items)
+            .FirstOrDefaultAsync(b => b.UserId == userId);
+
+        itemCount = basket?.Items.Sum(item => item.Quantity) ?? 0;
+    }
+}
+
+
+<li class="nav-item">
+    <a class="nav-link position-relative" href="@Url.Action("ViewBasket", "Baskets")">
+        <i class="fas fa-shopping-basket me-1"></i>
+        Basket
+        @if (itemCount > 0)
+        {
+            <span id="basketCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                @itemCount
+            </span>
+        }
+        else
+        {
+            <span id="basketCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+        }
+    </a>
+</li>

@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Admin - Products";
+}
+
+<h2>Products</h2>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ProductId</th>
+                <th>Name</th>
+                <th>Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.Name</td>
+                    <td>@item.StockQuantity</td>
+                    <td>
+                        <form asp-action="MinusStock" asp-route-id="@item.ProductId" method="post" style="display:inline;">
+                            <button type="submit">-</button>
+                        </form>
+                        <form asp-action="PlusStock" asp-route-id="@item.ProductId" method="post" style="display:inline;">
+                            <button type="submit">+</button>
+                        </form>
+                        <form asp-action="DeleteProduct" asp-route-id="@item.ProductId" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a href="@Url.Action("Create", "Admin")">
+    <button>Add New Product</button>
+</a>
+<a href="@Url.Action("CreateCategory", "Admin")" class="submit-btn">Add New Category</a>
+

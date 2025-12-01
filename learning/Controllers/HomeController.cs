@@ -24,9 +24,12 @@ namespace learning.Controllers
 
         public string Welcome(string name, int id) { 
 
-            return HtmlEncoder.Default.Encode($"Hello my nigga{name}, ID: {id}");
+            return HtmlEncoder.Default.Encode($"Hello my {name}, ID: {id}");
         
         }
+
+        public IActionResult About() { return View(); }
+        public IActionResult Contact() { return View(); }
 
         public IActionResult Privacy()
         {

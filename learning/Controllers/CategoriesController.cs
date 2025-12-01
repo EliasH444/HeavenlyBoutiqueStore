@@ -1,4 +1,5 @@
-﻿using learning.Models;
+﻿using learning.Data;
+using learning.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -7,6 +8,12 @@ namespace learning.Controllers
 {
     public class CategoriesController : Controller
     {
+        private readonly learningContext _context;
+
+        public CategoriesController(learningContext context)
+        {
+            _context = context;
+        }
         // GET: CatergoriesController
         public ActionResult Index()
         {
@@ -15,12 +22,21 @@ namespace learning.Controllers
 
      
         // GET: CatergoriesController/Details/5
-        public async ActionResult CategoryID(Category model)
+        public async Task<IActionResult> CollectCategoryID(Category model)
         {
-            if (!ModelState.IsValid) { 
+            if (!ModelState.IsValid)
+            {
+                return View(model); // Return view with validation errors
+            }
+
+            var category = await _context.Category.FindAsync(model.CategoryId);
+            if (category == null)
+            {
+                // Handle the case where the category is not found
+                ModelState.AddModelError(string.Empty, "Category not found.");
                 return View(model);
             }
-            var cat = await _context.Category.FindAsync(model.CategoryID);
+            return View(category);
         }
 
         // GET: CatergoriesController/Create

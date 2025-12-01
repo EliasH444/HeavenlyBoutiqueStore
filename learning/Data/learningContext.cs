@@ -16,6 +16,7 @@ namespace learning.Data
         public DbSet<Product> Product { get; set; } = default!;
         public DbSet<Basket> Basket { get; set; } = default!;
         public DbSet<BasketItem> BasketItem { get; set; } = default!;
+        public DbSet<Category> Category { get; set; } = default!;
 
     }
 }

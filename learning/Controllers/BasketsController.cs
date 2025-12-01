@@ -14,7 +14,7 @@ namespace learning.Controllers
     public class BasketsController : Controller
     {
         private readonly learningContext _context;
-        IUserService _userService;
+        private readonly IUserService _userService;
 
         public BasketsController(learningContext context, IUserService UserService)
         {
@@ -23,6 +23,7 @@ namespace learning.Controllers
         }
 
         // View basket
+        [HttpGet]
         public async Task<IActionResult> ViewBasket()
         {
             var userId = _userService.GetUserId();
@@ -97,7 +98,25 @@ namespace learning.Controllers
             return RedirectToAction("ViewBasket");
         }
 
-
+        public async Task<IActionResult> Update (int id, int quantity)
+        {
+            var basketItem = await _context.BasketItem.FindAsync(id);
+            if (basketItem == null)
+            {
+                return NotFound();
+            }
+            if (quantity <= 0)
+            {
+                _context.BasketItem.Remove(basketItem);
+            }
+            else
+            {
+                basketItem.Quantity = quantity;
+                _context.BasketItem.Update(basketItem);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ViewBasket));
+        }
 
 
         private bool BasketExists(int id)

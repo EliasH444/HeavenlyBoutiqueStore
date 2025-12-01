@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Admin</title>
+    <!-- Your existing CSS files -->
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- Enhanced Admin CSS -->
+    <link rel="stylesheet" href="~/css/admin-enhanced.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand">
+                <h1>Admin Panel</h1>
+            </div>
+            <nav class="admin-nav">
+                <div class="nav-section">
+                    <h3>Management</h3>
+                    <a href="@Url.Action("Index", "Admin")" class="nav-link">
+                        <i>📦</i> Products
+                    </a>
+                    <a href="@Url.Action("Create", "Admin")" class="nav-link">
+                        <i>➕</i> Add Product
+                    </a>
+                    <a href="@Url.Action("CreateCategory", "Admin")" class="nav-link">
+                        <i>📁</i> Add Category
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <h3>Analytics</h3>
+                    <a href="#" class="nav-link">
+                        <i>📊</i> Dashboard
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i>📈</i> Reports
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main-content">
+            <div class="content-header">
+                <h2>@ViewBag.Title</h2>
+                <div class="header-actions">
+                    <span>Welcome, Admin</span>
+                </div>
+            </div>
+
+            @RenderBody()
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

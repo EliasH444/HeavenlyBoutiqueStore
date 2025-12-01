@@ -1,0 +1,71 @@
+﻿@model learning.Models.Basket
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2><i class="fas fa-checkout me-2"></i>Checkout</h2>
+            <hr />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model?.Items != null && Model.Items.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr>
+                                            <td>@item.Product?.Name</td>
+                                            <td>@item.Quantity</td>
+                                            <td>£@(item.Product?.Price.ToString("F2") ?? "0.00")</td>
+                                            <td>£@((item.Quantity * (item.Product?.Price ?? 0)).ToString("F2"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Total: $123321</h5>
+                </div>
+                <div class="card-body">
+                    <p>This is a demo checkout page. In a real application, you would integrate with a payment processor here.</p>
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("ViewBasket", "Baskets")" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Basket
+                        </a>
+                        <button class="btn btn-success btn-lg" disabled>
+                            <i class="fas fa-lock me-2"></i>Complete Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+﻿@model learning.Models.Product
+
+@{
+    var quantity = 1;
+    var maxQuantity = Model?.StockQuantity ?? 1;
+}
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Add to Basket</h5>
+
+        @if (Model?.StockQuantity > 0)
+        {
+            <form asp-controller="Baskets" asp-action="AddToBasket" method="post" class="row g-3 align-items-center">
+                <input type="hidden" name="productId" value="@Model?.ProductId" />
+
+                <div class="col-auto">
+                    <label for="quantity" class="form-label">Quantity:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" id="quantity" name="quantity" value="@quantity"
+                           min="1" max="@maxQuantity" class="form-control" style="width: 100px;"
+                           onchange="updateAddToBasketButton(this.value)" />
+                </div>
+                <div class="col-auto">
+                    <button type="submit" id="addToBasketBtn" class="btn btn-primary">
+                        <i class="fas fa-cart-plus me-2"></i>Add to Basket
+                    </button>
+                </div>
+                <div class="col-12">
+                    <small class="text-muted">@maxQuantity in stock</small>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>Out of Stock
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function updateAddToBasketButton(quantity) {
+        const button = document.getElementById('addToBasketBtn');
+        if (quantity > 1) {
+            button.innerHTML = `<i class="fas fa-cart-plus me-2"></i>Add ${quantity} to Basket`;
+        } else {
+            button.innerHTML = `<i class="fas fa-cart-plus me-2"></i>Add to Basket`;
+        }
+    }
+</script>

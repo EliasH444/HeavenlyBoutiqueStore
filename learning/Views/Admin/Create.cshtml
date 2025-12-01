@@ -1,0 +1,50 @@
+﻿@model learning.Models.Product
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Create Product";
+}
+
+<h2>Create Product</h2>
+
+<div class="form-container">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" class="form-input" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Price (£)</label>
+            <input asp-for="Price" type="number" step="0.01" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+            <label>Stock Quantity</label>
+            <input asp-for="StockQuantity" type="number" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <!-- Match Product.Category (string) or change to CategoryId if you add that property -->
+            <select asp-for="Category" class="form-input">
+                <option value="">Select Category</option>
+                @foreach (var cat in (IEnumerable<learning.Models.Category>)ViewBag.Categories)
+                {
+                    <option value="@cat.Name">@cat.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Product</button>
+
+        <a href="@Url.Action("Index", "Admin")" class="back-btn">Back</a>
+    </form>
+</div>
