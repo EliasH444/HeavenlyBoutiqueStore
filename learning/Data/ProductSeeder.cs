@@ -21,13 +21,7 @@ namespace learning.Data
 
             var khamisProduct = new Product
             {
-                // Do NOT set ProductId if it is identity/DB-generated
-                Name = "Khamis Special",
-                Description = "A special product named Khamis",
-                Price = 19.99m,
-                StockQuantity = 100,
-                CreatedAt = DateTime.UtcNow,
-                Category = "Specials"
+               
             };
 
             db.Product.Add(khamisProduct);
