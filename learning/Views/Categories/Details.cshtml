@@ -1,0 +1,191 @@
+﻿@model learning.Models.Category
+
+@{
+    ViewData["Title"] = $"LWAD - {Model.Name}";
+}
+
+<!-- HERO SECTION -->
+<section class="hero-section">
+    <div class="delivery-info">DELIVERY TIME 7–12 WEEKS</div>
+    <h1 class="hero-title">@Model.Name</h1>
+    <p class="hero-tagline">
+        Explore our exclusive @Model.Name collection — where craftsmanship meets contemporary design.
+    </p>
+    <a href="/Categories" class="btn btn-dark hero-btn">Back to Categories</a>
+</section>
+
+<!-- PRODUCTS GRID -->
+<div class="container mt-5 mb-5">
+    <h2 class="collection-title">@Model.Name Collection</h2>
+
+    @if (Model.Products != null && Model.Products.Any())
+    {
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-md-4 mb-4">
+                    <a href="/Products/Details/@product.ProductId" class="product-link">
+                        <div class="product-card">
+                            <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+                            <div class="product-overlay">
+                                <h3>@product.Name</h3>
+                                <p>£@product.Price</p>
+                                <span class="btn btn-outline-dark btn-sm product-btn">View Details</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="no-products-text">No products available in this category.</p>
+    }
+</div>
+
+<!-- FEATURE BANNER -->
+<section class="feature-banner">
+    <h2>CUSTOM BRIDAL WEAR</h2>
+    <p>
+        Each piece is meticulously crafted with attention to detail, blending traditional Somali
+        elements with modern design. Our bespoke service ensures your bridal wear is uniquely yours.
+    </p>
+    <a href="/consultation" class="btn btn-outline-dark feature-btn">Book Consultation</a>
+</section>
+
+<!-- STYLES -->
+<style>
+    /* Hero Section */
+    .hero-section {
+        padding: 6rem 2rem;
+        text-align: center;
+        background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('https://images.unsplash.com/photo-1503342452485-86f35a1f3de1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    }
+
+    .delivery-info {
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 300;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+    }
+
+    .hero-tagline {
+        max-width: 600px;
+        margin: 1.5rem auto;
+        color: #555;
+        font-size: 1.2rem;
+    }
+
+    .hero-btn {
+        border-radius: 0;
+        padding: 1rem 3rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    /* Products Grid */
+    .collection-title {
+        text-align: center;
+        font-weight: 300;
+        letter-spacing: 2px;
+        margin-bottom: 3rem;
+    }
+
+    .product-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .product-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: 0.4s;
+        pointer-events: none; /* important so clicks pass through */
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-btn {
+        margin-top: 1rem;
+        border-radius: 0;
+        padding: 0.5rem 1.5rem;
+        letter-spacing: 1px;
+        pointer-events: auto; /* allow button interaction */
+    }
+
+    .no-products-text {
+        text-align: center;
+        color: #777;
+    }
+
+    /* Feature Banner */
+    .feature-banner {
+        background: #f9f9f9;
+        padding: 5rem 2rem;
+        text-align: center;
+    }
+
+        .feature-banner h2 {
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .feature-banner p {
+            max-width: 700px;
+            margin: 1.5rem auto;
+            color: #555;
+        }
+
+    .feature-btn {
+        border-radius: 0;
+        padding: 1rem 2.5rem;
+        letter-spacing: 2px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .product-image
+
+    {
+        height: 300px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-tagline {
+        font-size: 1rem;
+    }
+
+    }
+</style>
