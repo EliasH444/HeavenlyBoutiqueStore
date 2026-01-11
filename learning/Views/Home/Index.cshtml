@@ -1,5 +1,6 @@
-﻿﻿@{
-ViewData["Title"] = "LWAD - Signature Bridal Wear";
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "LWAD - Signature Bridal Wear";
 }
 
 <!DOCTYPE html>
@@ -8,38 +9,32 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
+
+    <!-- CSS (inline for now, can move to .css file later) -->
     <style>
-        /* Hero Section */
+        /* --- Hero Section --- */
         .hero-section {
             background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
             padding: 6rem 0;
-            position: relative;
-            margin-bottom: 4rem;
-        }
-
-        .hero-content {
-            max-width: 600px;
-            margin: 0 auto;
             text-align: center;
-        }
-
-        .hero-tagline {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            font-weight: 300;
-            color: #333;
-            margin-bottom: 1.5rem;
-            line-height: 1.4;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin-bottom: 4rem;
         }
 
         .hero-title {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             color: #000;
+            margin-bottom: 1rem;
+        }
+
+        .hero-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #333;
             margin-bottom: 2rem;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
 
@@ -50,29 +45,11 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
             padding: 0.5rem 1.5rem;
             font-size: 0.9rem;
             letter-spacing: 1px;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             text-transform: uppercase;
         }
 
-        /* Collections Section */
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 1.8rem;
-            color: #000;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Product Grid */
+        /* --- Product Grid --- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -102,7 +79,7 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             padding: 1.5rem;
             transform: translateY(100%);
             transition: transform 0.3s ease;
@@ -129,7 +106,7 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
             color: #666;
         }
 
-        /* Feature Banner */
+        /* --- Feature Banner --- */
         .feature-banner {
             background: #f9f9f9;
             padding: 4rem 0;
@@ -153,7 +130,7 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
             line-height: 1.6;
         }
 
-        /* Chat Button */
+        /* --- Chat Button --- */
         .chat-button {
             position: fixed;
             bottom: 2rem;
@@ -179,7 +156,7 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
                 text-decoration: none;
             }
 
-        /* Categories */
+        /* --- Categories --- */
         .category-section {
             padding: 4rem 0;
             background: #f9f9f9;
@@ -218,26 +195,6 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
             margin-bottom: 0.5rem;
         }
 
-        
-
-        .hero-title {
-            font-size: 2.5rem;
-        }
-
-        .hero-tagline {
-            font-size: 1.4rem;
-        }
-
-        .product-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-        }
-
-        }
     </style>
 </head>
 <body>
@@ -248,16 +205,10 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
-            <div class="hero-content">
-                <div class="delivery-info">DELIVERY TIME 7-12 WEEKS</div>
-                <h1 class="hero-title">SIGNATURE BRIDAL WEAR CATALOGUE</h1>
-                <p class="hero-tagline">Where culture meets contemporary elegance in bridal fashion</p>
-                <a href="/shop" class="btn btn-dark" style="border-radius: 0; padding: 1rem 3rem; letter-spacing: 1px; text-transform: uppercase;">
-                    SHOP NOW
-                </a>
-            </div>
-        </div>
+        <div class="delivery-info">DELIVERY TIME 7-12 WEEKS</div>
+        <h1 class="hero-title">SIGNATURE BRIDAL WEAR CATALOGUE</h1>
+        <p class="hero-tagline">Where culture meets contemporary elegance in bridal fashion</p>
+        <a href="/Categories" class="btn btn-dark" style="border-radius:0; padding:1rem 3rem; text-transform:uppercase;">SHOP NOW</a>
     </section>
 
     <!-- Featured Collections -->
@@ -267,100 +218,59 @@ ViewData["Title"] = "LWAD - Signature Bridal Wear";
         </div>
 
         <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                     alt="Traditional Somali Dirac" class="product-image">
-                <div class="product-overlay">
-                    <h3 class="product-title">Traditional Gold Dirac</h3>
-                    <p class="product-price">$299</p>
-                    <a href="#" class="btn btn-outline-dark btn-sm" style="border-radius: 0; margin-top: 1rem; padding: 0.5rem 1.5rem; text-transform: uppercase; letter-spacing: 1px;">
-                        View Details
-                    </a>
+            @foreach (var product in Model)
+            {
+                <div class="product-card">
+                    <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+                    <div class="product-overlay">
+                        <h3 class="product-title">@product.Name</h3>
+                        <p class="product-price">$@product.Price</p>
+                        <a href="/Products/Details/@product.ProductId"
+                           class="btn btn-outline-dark btn-sm"
+                           style="border-radius:0; margin-top:1rem; padding:0.5rem 1.5rem; text-transform:uppercase; letter-spacing:1px;">
+                            View Details
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1585487000127-20a79b6d2e8d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                     alt="Modern Bridal Gown" class="product-image">
-                <div class="product-overlay">
-                    <h3 class="product-title">Modern Fusion Gown</h3>
-                    <p class="product-price">$459</p>
-                    <a href="#" class="btn btn-outline-dark btn-sm" style="border-radius: 0; margin-top: 1rem; padding: 0.5rem 1.5rem; text-transform: uppercase; letter-spacing: 1px;">
-                        View Details
-                    </a>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                     alt="Embroidered Dress" class="product-image">
-                <div class="product-overlay">
-                    <h3 class="product-title">Hand-Embroidered Dress</h3>
-                    <p class="product-price">$389</p>
-                    <a href="#" class="btn btn-outline-dark btn-sm" style="border-radius: 0; margin-top: 1rem; padding: 0.5rem 1.5rem; text-transform: uppercase; letter-spacing: 1px;">
-                        View Details
-                    </a>
-                </div>
-            </div>
+            }
         </div>
     </div>
 
     <!-- Feature Banner -->
     <section class="feature-banner">
-        <div class="container">
-            <h2 class="feature-title">CUSTOM BRIDAL WEAR</h2>
-            <p class="feature-description">
-                Each piece is meticulously crafted with attention to detail, blending traditional Somali elements with contemporary design.
-                Our bespoke service ensures your bridal wear is uniquely yours.
-            </p>
-            <a href="/consultation" class="btn btn-outline-dark" style="border-radius: 0; padding: 1rem 2.5rem; text-transform: uppercase; letter-spacing: 1px;">
-                Book Consultation
-            </a>
-        </div>
+        <h2 class="feature-title">CUSTOM BRIDAL WEAR</h2>
+        <p class="feature-description">
+            Each piece is meticulously crafted with attention to detail, blending traditional Somali elements with contemporary design.
+            Our bespoke service ensures your bridal wear is uniquely yours.
+        </p>
+        <a href="/consultation" class="btn btn-outline-dark" style="border-radius:0; padding:1rem 2.5rem; text-transform:uppercase; letter-spacing:1px;">Book Consultation</a>
     </section>
 
     <!-- Categories Section -->
     <section class="category-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Shop By Category</h2>
+        <div class="section-header">
+            <h2 class="section-title">Shop By Category</h2>
+        </div>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-crown"></i></div>
+                <h3 class="category-name">Bridal Wear</h3>
+                <p style="color:#666; font-size:0.9rem;">Traditional & Modern</p>
             </div>
-
-            <div class="category-grid">
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-crown"></i>
-                    </div>
-                    <h3 class="category-name">Bridal Wear</h3>
-                    <p style="color: #666; font-size: 0.9rem;">Traditional & Modern</p>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-gem"></i>
-                    </div>
-                    <h3 class="category-name">Accessories</h3>
-                    <p style="color: #666; font-size: 0.9rem;">Guntino & Jewelry</p>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3 class="category-name">Henna Night</h3>
-                    <p style="color: #666; font-size: 0.9rem;">Special Occasion Wear</p>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3 class="category-name">Luxury Wear</h3>
-                    <p style="color: #666; font-size: 0.9rem;">Premium Collections</p>
-                </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-gem"></i></div>
+                <h3 class="category-name">Accessories</h3>
+                <p style="color:#666; font-size:0.9rem;">Guntino & Jewelry</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-heart"></i></div>
+                <h3 class="category-name">Henna Night</h3>
+                <p style="color:#666; font-size:0.9rem;">Special Occasion Wear</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-star"></i></div>
+                <h3 class="category-name">Luxury Wear</h3>
+                <p style="color:#666; font-size:0.9rem;">Premium Collections</p>
             </div>
         </div>
     </section>

@@ -1,48 +1,116 @@
-﻿@model learning.Models.Product
+﻿@model Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $"LWAD - {Model.Name}";
 }
 
-<h1>Details</h1>
+<section class="hero-section">
+    <div class="delivery-info">DELIVERY TIME 7–12 WEEKS</div>
+    <h1 class="hero-title">@Model.Name</h1>
+    <p class="hero-tagline">Signature Bridal Wear</p>
+</section>
 
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StockQuantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StockQuantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-    </dl>
+<div class="container product-details">
+    <div class="row g-5">
+        <!-- Images -->
+        <div class="col-lg-7">
+            <div class="product-image-wrapper">
+                <img src="@Model.ImageUrl"
+                     alt="@Model.Name"
+                     class="product-main-image" />
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-5">
+            <div class="product-info">
+                <h2 class="product-name">@Model.Name</h2>
+
+                <p class="product-price">£@Model.Price</p>
+
+                <p class="product-description">
+                    @Model.Description
+                </p>
+
+                <div class="product-actions">
+                    <button class="btn btn-dark w-100"
+                            style="border-radius:0; padding:1rem; text-transform:uppercase;">
+                        Add to Basket
+                    </button>
+
+                    <a href="/Categories"
+                       class="btn btn-outline-dark w-100 mt-3"
+                       style="border-radius:0; padding:1rem; text-transform:uppercase;">
+                        Back to Collection
+                    </a>
+                </div>
+
+                <div class="product-meta mt-4">
+                    <p><strong>Craft:</strong> Handcrafted</p>
+                    <p><strong>Category:</strong> Bridal Wear</p>
+                    <p><strong>Customisation:</strong> Available</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    /* Product Details Layout */
+    .product-details {
+        margin-bottom: 6rem;
+    }
+
+    .product-image-wrapper {
+        background: #f5f5f5;
+        padding: 2rem;
+    }
+
+    .product-main-image {
+        width: 100%;
+        height: 650px;
+        object-fit: cover;
+    }
+
+    /* Product Info */
+    .product-info {
+        padding-top: 2rem;
+    }
+
+    .product-name {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+    }
+
+    .product-price {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+    .product-description {
+        font-size: 0.95rem;
+        line-height: 1.8;
+        color: #444;
+        margin-bottom: 2.5rem;
+    }
+
+    .product-meta p {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    @@media (max-width: 768px) {
+    .product-main-image {
+        height: 450px;
+    }
+}
+
+</style>
