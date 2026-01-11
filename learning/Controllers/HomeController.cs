@@ -1,5 +1,7 @@
+using learning.Data;
 using learning.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Text.Encodings.Web;
 
@@ -8,18 +10,22 @@ namespace learning.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly learningContext _context;
 
         //public int id;
         //public String name;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, learningContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var product = _context.Product.Where(p => p.ProductId == 1008 || p.ProductId == 1009 || p.ProductId == 1010)
+                     .ToList();
+            return View(product);
         }
 
         public string Welcome(string name, int id) { 
