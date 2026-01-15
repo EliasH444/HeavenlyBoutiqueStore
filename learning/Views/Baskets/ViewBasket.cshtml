@@ -1,71 +1,85 @@
 ﻿@model learning.Models.Basket
 
 @{
-    ViewData["Title"] = "Checkout";
+    ViewData["Title"] = "Your Basket - LWAD";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h2><i class="fas fa-checkout me-2"></i>Checkout</h2>
-            <hr />
-        </div>
-    </div>
+<section class="hero-section" style="padding:6rem 2rem; text-align:center;">
+    <h1 class="hero-title">Your Basket</h1>
+    <p class="hero-tagline">Review your selected items before checkout</p>
+</section>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Order Summary</h5>
-                </div>
-                <div class="card-body">
-                    @if (Model?.Items != null && Model.Items.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.Items)
-                                    {
-                                        <tr>
-                                            <td>@item.Product?.Name</td>
-                                            <td>@item.Quantity</td>
-                                            <td>£@(item.Product?.Price.ToString("F2") ?? "0.00")</td>
-                                            <td>£@((item.Quantity * (item.Product?.Price ?? 0)).ToString("F2"))</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+<div class="container mt-5 mb-5">
+    @if (Model?.Items == null || !Model.Items.Any())
+    {
+        <p style="text-align:center; color:#777; font-size:1.1rem;">Your basket is empty.</p>
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="/Categories" class="btn btn-dark" style="border-radius:0; padding:1rem 3rem; text-transform:uppercase; letter-spacing:2px;">
+                Continue Shopping
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-md-4">
+                    <div class="product-card" style="position:relative; overflow:hidden; border:1px solid #eee;">
+                        <img src="@item.Product.ImageUrl"
+                             alt="@item.Product.Name"
+                             class="product-image"
+                             style="width:100%; height:300px; object-fit:cover;" />
+
+                        <div class="product-overlay" style="position:absolute; inset:0; background:rgba(255,255,255,0.9); display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; transition:0.3s;">
+                            <h3 class="product-title" style="font-weight:400; letter-spacing:1px;">@item.Product.Name</h3>
+                            <p class="product-price" style="margin-top:0.5rem;">£@item.Product.Price</p>
                         </div>
-                    }
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Total: $123321</h5>
-                </div>
-                <div class="card-body">
-                    <p>This is a demo checkout page. In a real application, you would integrate with a payment processor here.</p>
-                    <div class="d-grid gap-2">
-                        <a href="@Url.Action("ViewBasket", "Baskets")" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-2"></i>Back to Basket
-                        </a>
-                        <button class="btn btn-success btn-lg" disabled>
-                            <i class="fas fa-lock me-2"></i>Complete Purchase
-                        </button>
+                        <div class="basket-controls" style="padding:1rem; text-align:center;">
+                            <form asp-action="Update" method="post" style="display:flex; justify-content:center; align-items:center; gap:0.5rem;">
+                                <input type="hidden" name="id" value="@item.BasketItemId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" style="width:60px; padding:0.25rem;" />
+                                <button type="submit" class="btn btn-outline-dark btn-sm" style="border-radius:0; padding:0.25rem 1rem;">Update</button>
+                            </form>
+
+                            <a asp-action="RemoveFromBasket" asp-route-basketItemId="@item.BasketItemId"
+                               class="btn btn-danger btn-sm"
+                               style="margin-top:0.5rem; border-radius:0; padding:0.25rem 1rem;">
+                                Remove
+                            </a>
+                        </div>
+
+                        <div style="text-align:center; margin-top:0.5rem;">
+                            <p>Total: £@(item.Product.Price* item.Quantity)</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
-    </div>
+
+        <div class="basket-summary" style="margin-top:3rem; text-align:right;">
+            <h3 style="letter-spacing:1px; font-weight:400;">
+                Grand Total: £@Model.Items.Sum(i => i.Product.Price * i.Quantity)
+            </h3>
+
+            <a href="/Checkout" class="btn btn-dark" style="border-radius:0; padding:1rem 3rem; text-transform:uppercase; letter-spacing:2px; margin-top:1rem;">
+                Proceed to Checkout
+            </a>
+        </div>
+    }
 </div>
+
+<style>
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-image {
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+</style>
