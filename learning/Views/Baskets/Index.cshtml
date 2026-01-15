@@ -1,35 +1,85 @@
-﻿@model IEnumerable<learning.Models.Basket>
+﻿@model learning.Models.Basket
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Your Basket - LWAD";
 }
 
-<h1>Index</h1>
+<section class="hero-section" style="padding:6rem 2rem; text-align:center;">
+    <h1 class="hero-title">Your Basket</h1>
+    <p class="hero-tagline">Review your selected items before checkout</p>
+</section>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BasketID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BasketID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BasketID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container mt-5 mb-5">
+    @if (Model?.Items == null || !Model.Items.Any())
+    {
+        <p style="text-align:center; color:#777; font-size:1.1rem;">Your basket is empty.</p>
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="/Categories" class="btn btn-dark" style="border-radius:0; padding:1rem 3rem; text-transform:uppercase; letter-spacing:2px;">
+                Continue Shopping
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-md-4">
+                    <div class="product-card" style="position:relative; overflow:hidden; border:1px solid #eee;">
+                        <img src="@item.Product.ImageUrl"
+                             alt="@item.Product.Name"
+                             class="product-image"
+                             style="width:100%; height:300px; object-fit:cover;" />
+
+                        <div class="product-overlay" style="position:absolute; inset:0; background:rgba(255,255,255,0.9); display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; transition:0.3s;">
+                            <h3 class="product-title" style="font-weight:400; letter-spacing:1px;">@item.Product.Name</h3>
+                            <p class="product-price" style="margin-top:0.5rem;">£@item.Product.Price</p>
+                        </div>
+
+                        <div class="basket-controls" style="padding:1rem; text-align:center;">
+                            <form asp-action="Update" method="post" style="display:flex; justify-content:center; align-items:center; gap:0.5rem;">
+                                <input type="hidden" name="id" value="@item.BasketItemId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" style="width:60px; padding:0.25rem;" />
+                                <button type="submit" class="btn btn-outline-dark btn-sm" style="border-radius:0; padding:0.25rem 1rem;">Update</button>
+                            </form>
+
+                            <a asp-action="RemoveFromBasket" asp-route-basketItemId="@item.BasketItemId"
+                               class="btn btn-danger btn-sm"
+                               style="margin-top:0.5rem; border-radius:0; padding:0.25rem 1rem;">
+                                Remove
+                            </a>
+                        </div>
+
+                        <div style="text-align:center; margin-top:0.5rem;">
+                            <p>Total: £@(item.Product.Price* item.Quantity)</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="basket-summary" style="margin-top:3rem; text-align:right;">
+            <h3 style="letter-spacing:1px; font-weight:400;">
+                Grand Total: £@Model.Items.Sum(i => i.Product.Price * i.Quantity)
+            </h3>
+
+            <a href="/Checkout" class="btn btn-dark" style="border-radius:0; padding:1rem 3rem; text-transform:uppercase; letter-spacing:2px; margin-top:1rem;">
+                Proceed to Checkout
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-image {
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+</style>
