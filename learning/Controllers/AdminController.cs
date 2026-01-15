@@ -42,8 +42,11 @@ namespace learning.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
-            if (!ModelState.IsValid)
+            /*if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = _context.Category.ToList();
                 return View(product);
+            }*/
 
             _context.Product.Add(product);
             await _context.SaveChangesAsync();
