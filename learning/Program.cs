@@ -8,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure database connection
 builder.Services.AddDbContext<learningContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("learningContext")
-    ?? throw new InvalidOperationException("Connection string 'learningContext' not found.")));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("learningContext")
+        ?? throw new InvalidOperationException("Connection string 'learningContext' not found.")));
 
 // Add Identity services
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
