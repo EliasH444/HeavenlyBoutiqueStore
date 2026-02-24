@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using learning.Data;
+using learning.Models;
+using learning.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using learning.Data;
-using learning.Models;
-using learning.Services;
+using Stripe.Checkout;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace learning.Controllers
 {
@@ -54,7 +55,12 @@ namespace learning.Controllers
 
             if (basket == null)
             {
-                basket = new Basket { UserId = userId };
+                basket = new Basket
+                {
+                    UserId = userId,
+                    Items = new List<BasketItem>()
+
+                };
                 _context.Basket.Add(basket);
             }
 
@@ -123,5 +129,97 @@ namespace learning.Controllers
         {
             return _context.Basket.Any(e => e.BasketID == id);
         }
+
+        //Stripe Section
+
+        // CREATE STRIPE CHECKOUT SESSION
+        [HttpPost]
+        public async Task<IActionResult> Checkout()
+        {
+            Console.WriteLine("Checkout initiated");
+            var userId = _userService.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
+
+            var basket = await _context.Basket
+                .Include(b => b.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(b => b.UserId == userId);
+
+            if (basket == null || !basket.Items.Any())
+                return RedirectToAction("ViewBasket");
+
+            // Map basket items to Stripe line items
+            var lineItems = basket.Items.Select(i => new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = (long)(i.Product.Price * 100), // Stripe expects pence
+                    Currency = "gbp",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = i.Product.Name
+                    }
+                },
+                Quantity = i.Quantity
+            }).ToList();
+
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = lineItems,
+                Mode = "payment",
+                SuccessUrl = Url.Action("PaymentSuccess", "Baskets", null, Request.Scheme) + "?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = Url.Action("ViewBasket", "Baskets", null, Request.Scheme)
+            };
+
+            var service = new SessionService();
+            var session = service.Create(options);
+
+            // Redirect to Stripe Checkout
+            return Redirect(session.Url);
+        }
+
+        // PAYMENT SUCCESS
+        [HttpGet]
+        public async Task<IActionResult> PaymentSuccess(string session_id)
+        {
+            var userId = _userService.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
+
+            var basket = await _context.Basket
+                .Include(b => b.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(b => b.UserId == userId);
+
+            if (basket == null || !basket.Items.Any())
+                return RedirectToAction("ViewBasket");
+
+            // Create order from basket
+            var purchase = new Purchase
+            {
+                UserId = userId,
+                TotalAmount = basket.Items.Sum(i => i.Product.Price * i.Quantity),
+                CreatedAt = DateTime.Now,
+                Items = basket.Items.Select(i => new PurchaseItem
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    Price = i.Product.Price
+                }).ToList()
+            };
+
+            _context.Purchase.Add(purchase);
+
+            // Clear basket
+            _context.BasketItem.RemoveRange(basket.Items);
+            await _context.SaveChangesAsync();
+
+            return View(purchase);
+        }
+
+
     }
 }
