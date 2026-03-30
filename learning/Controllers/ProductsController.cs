@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using learning.Data;
 using learning.Models;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Stripe.Climate;
 
 namespace learning.Controllers
 {
@@ -54,13 +56,13 @@ namespace learning.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] Product product)
+        public async Task<IActionResult> Create([FromBody] Models.Product product)
         {
             //if (ModelState.IsValid)
             //{
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            _context.Add(product);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
             //}
             Console.WriteLine(product);
             return View(product);
@@ -87,7 +89,7 @@ namespace learning.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,StockQuantity,CreatedAt")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,StockQuantity,CreatedAt")] Models.Product product)
         {
             if (id != product.ProductId)
             {
@@ -137,7 +139,7 @@ namespace learning.Controllers
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
-        
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -155,5 +157,6 @@ namespace learning.Controllers
         {
             return _context.Product.Any(e => e.ProductId == id);
         }
+
     }
 }
