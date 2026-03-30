@@ -17,16 +17,24 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<learningContext>()
     .AddDefaultTokenProviders();
 
-// Add services to the container
+// Add services
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
+builder.Services.AddScoped<ISearch, SearchService>();
+builder.Services.AddScoped<IImageService, LocalImageService>();
 
 var app = builder.Build();
 
-// ======= ADMIN SEEDING CODE STARTS =======
+// ===== 1️⃣ Apply migrations first =====
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<learningContext>();
+    db.Database.Migrate(); // Creates all tables if they don't exist
+}
+
+// ===== 2️⃣ Seed admin user after migrations =====
 async Task SeedAdminUserAsync()
 {
     using var scope = app.Services.CreateScope();
@@ -35,7 +43,7 @@ async Task SeedAdminUserAsync()
 
     const string adminRoleName = "Admin";
 
-    // Create role if not exist
+    // Create role if not exists
     if (!await roleManager.RoleExistsAsync(adminRoleName))
         await roleManager.CreateAsync(new IdentityRole(adminRoleName));
 
@@ -63,10 +71,8 @@ async Task SeedAdminUserAsync()
     if (!await userManager.IsInRoleAsync(adminUser, adminRoleName))
         await userManager.AddToRoleAsync(adminUser, adminRoleName);
 }
-// ======= ADMIN SEEDING CODE ENDS =======
 
-
-// Configure the HTTP request pipeline
+// ===== 3️⃣ Configure middleware =====
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -75,10 +81,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// Enable authentication and authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -86,7 +89,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Run the seeding
+// ===== 4️⃣ Run seeding =====
 await SeedAdminUserAsync();
 
 app.Run();

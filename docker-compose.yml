@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__learningContext=Host=ep-patient-bush-a96zzfpk-pooler.gwc.azure.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_jgDlzq7iCK2Q;SSL Mode=Require;Trust Server Certificate=true
+    ports:
+      - "5000:80"
+    restart: unless-stopped
