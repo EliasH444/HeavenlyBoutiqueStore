@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace learning.Models
 {
@@ -18,7 +19,16 @@ namespace learning.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        public string ImageUrl { get; set; } = string.Empty;
+        // Replaces ImageUrl
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+
+        [NotMapped]
+        public ProductImage? PrimaryImage =>
+            Images.FirstOrDefault(i => i.IsPrimary) ?? Images.FirstOrDefault();
+
+        [NotMapped]
+        public string PrimaryImageUrl => PrimaryImage?.Url ?? "/images/placeholder.jpg";
+        //public List<string> images { get; set; } = new List<string>();
 
     }
 }
