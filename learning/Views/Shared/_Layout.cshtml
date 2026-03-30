@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LWAD</title>
+    <title>@ViewData["Title"] - Heavenly Boutique</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/learning.styles.css" asp-append-version="true" />
@@ -213,6 +213,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
+                <!-- Brand -->
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     LWAD
                 </a>
@@ -248,12 +249,22 @@
                     </ul>
 
                     <!-- Search and User Actions -->
-                    <div class="user-actions">
-                        <div class="search-box">
-                            <input type="text" placeholder="Search" aria-label="Search">
-                            <i class="fas fa-search search-icon"></i>
-                        </div>
+                    <div class="user-actions position-relative d-flex align-items-center gap-3">
+                        <!-- Search Form -->
+                        <form asp-controller="Home" asp-action="Search" method="get" class="search-box position-relative">
+                            <input type="text"
+                                   name="searchString"
+                                   value="@(ViewContext.HttpContext.Request.Query["searchString"].ToString())"
+                                   placeholder="Search products..."
+                                   aria-label="Search"
+                                   class="form-control"
+                                   style="padding-right:2.5rem;" />
+                            <button type="submit" class="border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y me-2">
+                                <i class="fas fa-search search-icon"></i>
+                            </button>
+                        </form>
 
+                        <!-- User Actions -->
                         @if (User.Identity.IsAuthenticated)
                         {
                             <a href="#" class="user-action-link">Account</a>
@@ -282,7 +293,7 @@
     </main>
 
     <footer class="footer">
-        <!-- <div class="container">
+         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <h5>LWAD</h5>
@@ -319,7 +330,7 @@
                     &copy; @DateTime.Now.Year LWAD. All rights reserved.
                 </div>
             </div>
-        </div> -->
+        </div> 
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

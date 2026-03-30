@@ -1,0 +1,25 @@
+﻿@model learning.Models.Purchase
+@{
+    ViewData["Title"] = "Payment Success";
+}
+
+<div class="purchase-success">
+    <h2>Payment Successful!</h2>
+    <p class="success-msg">Thank you for your purchase, your order has been placed.</p>
+
+    <div class="purchase-details">
+        <h3>Purchase ID: @Model.PurchaseID</h3>
+        <p>Total Paid: £@Model.TotalAmount</p>
+        <p>Date: @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+
+    <h3>Items:</h3>
+    <ul class="purchase-items">
+        @foreach (var item in Model.Items)
+        {
+            <li>@item.ProductName - Qty: @item.Quantity - £@(item.Price* item.Quantity)</li>
+        }
+    </ul>
+
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Continue Shopping</a>
+</div>

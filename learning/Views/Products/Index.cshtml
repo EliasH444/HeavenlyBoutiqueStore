@@ -1,103 +1,191 @@
 ﻿@model IEnumerable<learning.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "LWAD - All Products";
 }
 
-<h1>View All Dresses</h1>
+<!-- HERO SECTION -->
+<section class="hero-section">
+    <div class="delivery-info">DELIVERY TIME 7–12 WEEKS</div>
+    <h1 class="hero-title">Shop All Dresses</h1>
+    <p class="hero-tagline">
+        Explore our exclusive handcrafted collection — where elegance meets modern design.
+    </p>
+</section>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<div class="container mt-5">
-    <div class="row">
-        @foreach (var product in Model)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card" style="width: 18rem;">
-                    <img src="" class="card-img-top" alt="@product.Name">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text">$@product.Price</p>
-                        <a href="#" class="btn btn-primary">Dress details</a>
+<!-- SEARCH BAR (optional) -->
+<form asp-action="Search" method="get" class="search-bar mb-5">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search products..." value="@Context.Request.Query["q"]" />
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+
+<!-- PRODUCTS GRID -->
+<div class="container mt-5 mb-5">
+    @if (Model != null && Model.Any())
+    {
+        <div class="product-grid">
+            @foreach (var product in Model)
+            {
+                <a href="/Products/Details/@product.ProductId" class="product-card">
+                    <img src="@(string.IsNullOrEmpty(product.PrimaryImageUrl) ? "/images/placeholder.png" : product.PrimaryImageUrl)" alt="@product.Name" class="product-image" />
+                    <div class="product-overlay">
+                        <h3>@product.Name</h3>
+                        <p>£@product.Price</p>
+                        <span class="btn btn-outline-dark btn-sm product-btn">View Details</span>
                     </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-<div class="container mt-5">
-    <div class="row">
-        
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card" style="width: 18rem;">
-                    <img src="" class="card-img-top" alt="ss">
-                    <div class="card-body">
-                        <h5 class="card-title">sss</h5>
-                        <p class="card-text">s</p>
-                        <a href="#" class="btn btn-primary">Dress detailssss</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-<div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">@Html.DisplayNameFor(model => model.Name)</p>
-        <a href="#" class="btn btn-primary">Dress details</a>
-    </div>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="no-products-text">No products available.</p>
+    }
 </div>
 
+<!-- FEATURE BANNER -->
+<section class="feature-banner">
+    <h2>CUSTOM BRIDAL WEAR</h2>
+    <p>
+        Each piece is meticulously crafted with attention to detail, blending traditional
+        elements with modern design. Our bespoke service ensures your bridal wear is uniquely yours.
+    </p>
+    <a href="/consultation" class="btn btn-outline-dark feature-btn">Book Consultation</a>
+</section>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StockQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<!-- STYLES -->
+<style>
+    /* HERO SECTION */
+    .hero-section {
+        padding: 6rem 2rem;
+        text-align: center;
+        background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('https://images.unsplash.com/photo-1503342452485-86f35a1f3de1') center/cover no-repeat;
+    }
+
+    .delivery-info {
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 300;
+        letter-spacing: 3px;
+        margin-bottom: 1rem;
+    }
+
+    .hero-tagline {
+        max-width: 600px;
+        margin: 1.5rem auto;
+        color: #555;
+        font-size: 1.2rem;
+    }
+
+    /* PRODUCT GRID */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .product-card {
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+        overflow: hidden;
+        height: 420px;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: 0.4s;
+        pointer-events: none;
+        text-align: center;
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-overlay h3 {
+        margin-bottom: 0.5rem;
+    }
+
+    .product-btn {
+        margin-top: 1rem;
+        border-radius: 0;
+        padding: 0.5rem 1.5rem;
+        pointer-events: auto;
+    }
+
+    /* NO PRODUCTS TEXT */
+    .no-products-text {
+        text-align: center;
+        color: #777;
+    }
+
+    /* FEATURE BANNER */
+    .feature-banner {
+        background: #f9f9f9;
+        padding: 5rem 2rem;
+        text-align: center;
+    }
+
+        .feature-banner h2 {
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .feature-banner p {
+            max-width: 700px;
+            margin: 1.5rem auto;
+            color: #555;
+        }
+
+    .feature-btn {
+        border-radius: 0;
+        padding: 1rem 2.5rem;
+        letter-spacing: 2px;
+    }
+
+    /* SEARCH BAR */
+    .search-bar .input-group {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* RESPONSIVE */
+    @@media (max-width: 768px) {
+        .hero-title
+
+    {
+        font-size: 2rem;
+    }
+
+    .hero-tagline {
+        font-size: 1rem;
+    }
+
+    .product-card {
+        height: 300px;
+    }
+
+    }
+</style>

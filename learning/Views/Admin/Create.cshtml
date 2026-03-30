@@ -38,7 +38,7 @@
             <span asp-validation-for="StockQuantity" class="text-danger"></span>
         </div>
 
-        <!-- Category (FIXED) -->
+        <!-- Category -->
         <div class="form-group">
             <label asp-for="CategoryId">Category</label>
             <select asp-for="CategoryId" class="form-input" required>
@@ -51,17 +51,16 @@
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
 
-        <!-- Image URL -->
+        <!-- Images (multiple URLs) -->
         <div class="form-group">
-            <label asp-for="ImageUrl"></label>
-            <input asp-for="ImageUrl"
-                   class="form-input"
-                   placeholder="https://raw.githubusercontent.com/yourusername/ecom-images/main/products/example.jpg"
-                   required />
+            <label>Product Images (comma separated URLs)</label>
+            <textarea name="ImageUrls" class="form-input" rows="3"
+                      placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
+            <small class="text-muted">The first URL will be the primary image.</small>
         </div>
 
         <!-- Live Image Preview -->
-        <img id="preview" style="max-width:200px; display:none; margin-top:10px;" />
+        <div id="preview-container" style="display:flex; gap:10px; margin-top:10px;"></div>
 
         <button type="submit" class="submit-btn">Create Product</button>
         <a href="@Url.Action("Index", "Admin")" class="back-btn">Back</a>
@@ -70,18 +69,22 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const textarea = document.querySelector('[name="ImageUrls"]');
+        const previewContainer = document.getElementById('preview-container');
+
+        textarea.addEventListener('input', () => {
+            previewContainer.innerHTML = '';
+            const urls = textarea.value.split(',').map(u => u.trim()).filter(u => u);
+            urls.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.maxWidth = '100px';
+                img.style.maxHeight = '100px';
+                img.style.objectFit = 'cover';
+                previewContainer.appendChild(img);
+            });
+        });
+    </script>
 }
-
-<script>
-    const input = document.querySelector('[name="ImageUrl"]');
-    const preview = document.getElementById('preview');
-
-    input.addEventListener('input', () => {
-        if (input.value) {
-            preview.src = input.value;
-            preview.style.display = 'block';
-        } else {
-            preview.style.display = 'none';
-        }
-    });
-</script>
