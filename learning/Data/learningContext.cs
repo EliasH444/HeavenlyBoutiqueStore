@@ -20,6 +20,7 @@ namespace learning.Data
 
         public DbSet<Purchase> Purchase { get; set; }
         public DbSet<PurchaseItem> PurchaseItem { get; set; }
+        public DbSet<ProductImage> ProductImage { get; set; }
 
     }
 }
