@@ -31,28 +31,28 @@
             font-weight: 400;
         }
 
-        /* Modern Navigation */
+        /* ── NAVIGATION ── */
         .navbar {
             background-color: var(--white) !important;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 1.2rem 0;
+            padding: 1rem 0;
             border-bottom: 1px solid #eee;
         }
 
         .navbar-brand {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--black) !important;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .nav-link {
             color: var(--dark-gray) !important;
-            font-weight: 400;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            margin: 0 1rem;
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin: 0 0.6rem;
             padding: 0.5rem 0 !important;
             text-transform: uppercase;
             position: relative;
@@ -73,139 +73,202 @@
                 transition: width 0.3s ease;
             }
 
-            .nav-link:hover::after {
+            .nav-link:hover::after,
+            .nav-link.active::after {
                 width: 100%;
             }
 
-        /* Search Box */
+        /* ── SEARCH BOX ── */
         .search-box {
             position: relative;
-            max-width: 200px;
+            width: 200px;
         }
 
             .search-box input {
                 border: 1px solid #ddd;
                 border-radius: 0;
-                padding: 0.5rem 2rem 0.5rem 1rem;
-                font-size: 0.9rem;
+                padding: 0.45rem 2.2rem 0.45rem 0.9rem;
+                font-size: 0.8rem;
+                font-family: 'Montserrat', sans-serif;
                 width: 100%;
                 background: var(--white);
+                transition: border-color 0.2s;
             }
 
-            .search-box .search-icon {
+                .search-box input:focus {
+                    outline: none;
+                    border-color: var(--black);
+                    box-shadow: none;
+                }
+
+            .search-box .search-submit {
                 position: absolute;
-                right: 1rem;
+                right: 0.6rem;
                 top: 50%;
                 transform: translateY(-50%);
                 color: var(--medium-gray);
+                border: none;
+                background: transparent;
+                padding: 0;
+                font-size: 0.85rem;
+                cursor: pointer;
+                line-height: 1;
             }
 
-        /* User Actions */
+                .search-box .search-submit:hover {
+                    color: var(--black);
+                }
+
+        /* ── USER ACTIONS ── */
         .user-actions {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1.4rem;
         }
 
         .user-action-link {
             color: var(--dark-gray);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            font-weight: 500;
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
+            letter-spacing: 1px;
+            transition: color 0.2s;
         }
 
             .user-action-link:hover {
                 color: var(--black);
             }
 
-        .cart-btn {
+        /* Logout button styled identically to anchor links */
+        .user-action-btn {
             color: var(--dark-gray);
             background: none;
             border: none;
-            font-size: 0.9rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 0.5rem 0;
+            letter-spacing: 1px;
+            padding: 0;
+            cursor: pointer;
+            transition: color 0.2s;
         }
 
-            .cart-btn:hover {
+            .user-action-btn:hover {
                 color: var(--black);
             }
 
-        /* Dropdown Menu */
+        /* Cart icon */
+        .cart-icon-btn {
+            color: var(--dark-gray);
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            padding: 0;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+            .cart-icon-btn:hover {
+                color: var(--black);
+            }
+
+        /* ── DROPDOWN ── */
         .dropdown-menu {
             border-radius: 0;
             border: 1px solid #eee;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.07);
             padding: 0;
+            min-width: 260px;
         }
 
         .dropdown-item {
-            padding: 0.75rem 1.5rem;
-            font-size: 0.9rem;
+            padding: 0.7rem 1.4rem;
+            font-size: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
             color: var(--dark-gray);
             border-bottom: 1px solid #f5f5f5;
+            text-transform: uppercase;
+            transition: background 0.15s, color 0.15s;
         }
 
+            .dropdown-item:last-child {
+                border-bottom: none;
+            }
+
             .dropdown-item:hover {
-                background-color: #f9f9f9;
+                background-color: #f5f5f5;
                 color: var(--black);
             }
 
-        /* Main Content */
+        /* ── MAIN CONTENT ── */
         main {
             min-height: calc(100vh - 200px);
         }
 
-        /* Footer */
+        /* ── FOOTER ── */
         .footer {
             background-color: var(--black);
             color: var(--white);
             padding: 4rem 0 2rem;
-            margin-top: 4rem;
+            margin-top: 5rem;
         }
 
             .footer h5 {
                 font-weight: 600;
                 margin-bottom: 1.5rem;
-                font-size: 1rem;
+                font-size: 0.85rem;
                 text-transform: uppercase;
-                letter-spacing: 1px;
+                letter-spacing: 2px;
             }
 
             .footer a {
                 color: var(--medium-gray);
                 text-decoration: none;
-                margin-bottom: 0.5rem;
+                margin-bottom: 0.6rem;
                 display: block;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
+                transition: color 0.2s;
             }
 
                 .footer a:hover {
                     color: var(--white);
                 }
 
+        .footer-social a {
+            display: inline-block;
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
         .copyright {
-            border-top: 1px solid #333;
+            border-top: 1px solid #2a2a2a;
             padding-top: 2rem;
             margin-top: 3rem;
             color: var(--medium-gray);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
-        
+        /* ── MOBILE ── */
+        @@media (max-width: 991px) {
+            .search-box {
+                width: 100%;
+                margin: 0.75rem 0;
+            }
 
-        .nav-link {
-            margin: 0.5rem 0;
-        }
+            .user-actions {
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-top: 0.5rem;
+                margin-bottom: 1rem;
+            }
 
-        .search-box {
-            margin: 1rem 0;
-            max-width: 100%;
-        }
-
+            .nav-link {
+                margin: 0.25rem 0;
+            }
         }
     </style>
 </head>
@@ -218,7 +281,7 @@
                     LWAD
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -226,52 +289,48 @@
                     <!-- Navigation Links -->
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 SHOP
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">SIGNATURE BRIDAL WEAR CATALOGUE</a>
-                                <a class="dropdown-item" href="#">PRESTROIDS PRE-ORDER CATALOGUE</a>
-                                <a class="dropdown-item" href="#">LUXURY WEAR</a>
-                                <a class="dropdown-item" href="#">FRANSAMY & VELVET DRAGS</a>
-                                <a class="dropdown-item" href="#">FACE-TO-FACE BRIDAL CONSULTATION</a>
-                                <a class="dropdown-item" href="#">BRIDAL ACCESSORIES</a>
-                                <a class="dropdown-item" href="#">NINXAH DRESSES</a>
-                                <a class="dropdown-item" href="#">HIDO IYO DHAIGAN & SHAASHI</a>
+                            <div class="dropdown-menu" aria-labelledby="shopDropdown">
+                                <a class="dropdown-item" href="#">Signature Bridal Wear Catalogue</a>
+                                <a class="dropdown-item" href="#">Pre-Order Catalogue</a>
+                                <a class="dropdown-item" href="#">Luxury Wear</a>
+                                <a class="dropdown-item" href="#">Fransamy &amp; Velvet Drags</a>
+                                <a class="dropdown-item" href="#">Face-to-Face Bridal Consultation</a>
+                                <a class="dropdown-item" href="#">Bridal Accessories</a>
+                                <a class="dropdown-item" href="#">Ninxah Dresses</a>
+                                <a class="dropdown-item" href="#">Hido iyo Dhaigan &amp; Shaashi</a>
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">FAQ+</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">TERMS & CONDITIONS</a>
+                            <a class="nav-link" href="#">Terms &amp; Conditions</a>
                         </li>
                     </ul>
 
                     <!-- Search and User Actions -->
-                    <div class="user-actions position-relative d-flex align-items-center gap-3">
+                    <div class="user-actions">
                         <!-- Search Form -->
-                        <form asp-controller="Home" asp-action="Search" method="get" class="search-box position-relative">
+                        <form asp-controller="Home" asp-action="Search" method="get" class="search-box">
                             <input type="text"
                                    name="searchString"
                                    value="@(ViewContext.HttpContext.Request.Query["searchString"].ToString())"
-                                   placeholder="Search products..."
-                                   aria-label="Search"
-                                   class="form-control"
-                                   style="padding-right:2.5rem;" />
-                            <button type="submit" class="border-0 bg-transparent position-absolute end-0 top-50 translate-middle-y me-2">
-                                <i class="fas fa-search search-icon"></i>
+                                   placeholder="Search products…"
+                                   aria-label="Search products" />
+                            <button type="submit" class="search-submit" aria-label="Submit search">
+                                <i class="fas fa-search"></i>
                             </button>
                         </form>
 
-                        <!-- User Actions -->
+                        <!-- Auth Links -->
                         @if (User.Identity.IsAuthenticated)
                         {
                             <a href="#" class="user-action-link">Account</a>
-                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                                <button type="submit" class="user-action-link border-0 bg-transparent">
-                                    Logout
-                                </button>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline m-0 p-0">
+                                <button type="submit" class="user-action-btn">Logout</button>
                             </form>
                         }
                         else
@@ -279,7 +338,8 @@
                             <a class="user-action-link" asp-controller="Account" asp-action="Login">Login</a>
                         }
 
-                        <button class="cart-btn">
+                        <!-- Cart -->
+                        <button class="cart-icon-btn" aria-label="View basket">
                             <i class="fas fa-shopping-bag"></i>
                         </button>
                     </div>
@@ -293,11 +353,11 @@
     </main>
 
     <footer class="footer">
-         <div class="container">
+        <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
                     <h5>LWAD</h5>
-                    <p style="color: var(--medium-gray); font-size: 0.9rem; line-height: 1.6;">
+                    <p style="color: var(--medium-gray); font-size: 0.875rem; line-height: 1.7; max-width: 280px;">
                         Where culture meets contemporary elegance in bridal fashion.
                     </p>
                 </div>
@@ -317,11 +377,11 @@
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <h5>Connect</h5>
-                    <div class="d-flex gap-3">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="#"><i class="fab fa-pinterest"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    <div class="d-flex gap-3 footer-social">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
             </div>
@@ -330,7 +390,7 @@
                     &copy; @DateTime.Now.Year LWAD. All rights reserved.
                 </div>
             </div>
-        </div> 
+        </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

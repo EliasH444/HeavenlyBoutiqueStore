@@ -20,16 +20,16 @@
 
     @if (Model.Products != null && Model.Products.Any())
     {
-        <div class="row">
+        <div class="row g-4">
             @foreach (var product in Model.Products)
             {
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 col-sm-6">
                     <a href="/Products/Details/@product.ProductId" class="product-link">
                         <div class="product-card">
                             <img src="@product.PrimaryImageUrl" alt="@product.Name" class="product-image" />
                             <div class="product-overlay">
-                                <h3>@product.Name</h3>
-                                <p>£@product.Price</p>
+                                <h3 class="product-overlay__name">@product.Name</h3>
+                                <p class="product-overlay__price">£@product.Price</p>
                                 <span class="btn btn-outline-dark btn-sm product-btn">View Details</span>
                             </div>
                         </div>
@@ -54,18 +54,19 @@
     <a href="/consultation" class="btn btn-outline-dark feature-btn">Book Consultation</a>
 </section>
 
-<!-- STYLES -->
 <style>
-    /* Hero Section */
+    /* ── HERO ── */
     .hero-section {
         padding: 6rem 2rem;
         text-align: center;
-        background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('https://images.unsplash.com/photo-1503342452485-86f35a1f3de1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('https://images.unsplash.com/photo-1503342452485-86f35a1f3de1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center / cover no-repeat;
     }
 
     .delivery-info {
-        font-size: 0.85rem;
-        letter-spacing: 2px;
+        font-size: 0.75rem;
+        letter-spacing: 3px;
+        color: #888;
+        text-transform: uppercase;
         margin-bottom: 1rem;
     }
 
@@ -73,31 +74,37 @@
         font-size: 3rem;
         font-weight: 300;
         letter-spacing: 3px;
+        text-transform: uppercase;
         margin-bottom: 1rem;
     }
 
     .hero-tagline {
         max-width: 600px;
-        margin: 1.5rem auto;
-        color: #555;
-        font-size: 1.2rem;
+        margin: 1.25rem auto 2rem;
+        color: #666;
+        font-size: 1.05rem;
+        line-height: 1.7;
     }
 
     .hero-btn {
         border-radius: 0;
-        padding: 1rem 3rem;
+        padding: 0.9rem 2.8rem;
         text-transform: uppercase;
         letter-spacing: 2px;
+        font-size: 0.8rem;
     }
 
-    /* Products Grid */
+    /* ── COLLECTION TITLE ── */
     .collection-title {
         text-align: center;
         font-weight: 300;
-        letter-spacing: 2px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
         margin-bottom: 3rem;
+        font-size: 1.5rem;
     }
 
+    /* ── PRODUCT CARD ── */
     .product-link {
         display: block;
         text-decoration: none;
@@ -114,78 +121,106 @@
         height: 420px;
         object-fit: cover;
         display: block;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.04);
     }
 
     .product-overlay {
         position: absolute;
         inset: 0;
-        background: rgba(255,255,255,0.9);
+        background: rgba(255,255,255,0.92);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         opacity: 0;
-        transition: 0.4s;
-        pointer-events: none; /* important so clicks pass through */
+        transition: opacity 0.35s ease;
+        pointer-events: none;
+        padding: 1.5rem;
     }
 
     .product-card:hover .product-overlay {
         opacity: 1;
     }
 
+    .product-overlay__name {
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .product-overlay__price {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 0;
+    }
+
     .product-btn {
-        margin-top: 1rem;
+        margin-top: 1.25rem;
         border-radius: 0;
         padding: 0.5rem 1.5rem;
         letter-spacing: 1px;
-        pointer-events: auto; /* allow button interaction */
+        font-size: 0.78rem;
+        pointer-events: auto;
+        text-transform: uppercase;
     }
 
     .no-products-text {
         text-align: center;
-        color: #777;
+        color: #888;
+        padding: 3rem 0;
     }
 
-    /* Feature Banner */
+    /* ── FEATURE BANNER ── */
     .feature-banner {
         background: #f9f9f9;
         padding: 5rem 2rem;
         text-align: center;
+        border-top: 1px solid #ebebeb;
     }
 
         .feature-banner h2 {
             font-weight: 300;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 1rem;
         }
 
         .feature-banner p {
-            max-width: 700px;
-            margin: 1.5rem auto;
-            color: #555;
+            max-width: 640px;
+            margin: 1.25rem auto 2rem;
+            color: #666;
+            line-height: 1.7;
         }
 
     .feature-btn {
         border-radius: 0;
-        padding: 1rem 2.5rem;
+        padding: 0.9rem 2.5rem;
         letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
     }
 
-    /* Responsive */
+    /* ── RESPONSIVE ── */
     @@media (max-width: 768px) {
-        .product-image
+        .product-image {
+            height: 300px;
+        }
 
-    {
-        height: 300px;
-    }
+        .hero-title {
+            font-size: 2rem;
+        }
 
-    .hero-title {
-        font-size: 2rem;
-    }
+        .hero-tagline {
+            font-size: 0.95rem;
+        }
 
-    .hero-tagline {
-        font-size: 1rem;
-    }
-
+        .hero-section {
+            padding: 4rem 1.5rem;
+        }
     }
 </style>

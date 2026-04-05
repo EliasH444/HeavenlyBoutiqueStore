@@ -4,85 +4,356 @@
     ViewData["Title"] = "Your Basket - LWAD";
 }
 
-<section class="hero-section" style="padding:3rem 2rem; text-align:center; background:#fafafa; border-bottom:1px solid #eee;">
-    <h1 class="hero-title" style="font-weight:600; font-size:2rem;">Your Basket</h1>
-    <p class="hero-tagline" style="color:#888; font-size:1rem;">Review your selected items before checkout</p>
+<!-- PAGE HEADER -->
+<section class="basket-hero">
+    <p class="basket-hero__eyebrow">LWAD</p>
+    <h1 class="basket-hero__title">Your Basket</h1>
+    <p class="basket-hero__sub">Review your selected items before checkout</p>
 </section>
 
-<div class="container basket-container" style="max-width:1100px; margin:2rem auto;">
+<div class="container basket-container">
+
     @if (Model?.Items == null || !Model.Items.Any())
     {
-        <p style="text-align:center; color:#777; font-size:1.1rem;">Your basket is empty.</p>
-        <div style="text-align:center; margin-top:2rem;">
-            <a href="/Categories" class="btn btn-dark btn-lg" style="border-radius:6px; padding:0.8rem 2rem; text-transform:uppercase;">
-                Continue Shopping
-            </a>
+        <!-- Empty State -->
+        <div class="basket-empty">
+            <i class="fas fa-shopping-bag basket-empty__icon"></i>
+            <p class="basket-empty__msg">Your basket is empty.</p>
+            <a href="/Categories" class="btn-lwad">Continue Shopping</a>
         </div>
     }
     else
     {
-        <div class="basket-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem;">
+        <!-- Product Grid -->
+        <div class="basket-grid">
             @foreach (var item in Model.Items)
             {
-                <div class="basket-card" style="background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.05); overflow:hidden; display:flex; flex-direction:column;">
-
-                    <div class="image-wrapper" style="position:relative; overflow:hidden;">
+                <div class="basket-card">
+                    <div class="basket-card__img-wrap">
                         <img src="@item.Product.PrimaryImageUrl"
                              alt="@item.Product.Name"
-                             style="width:100%; height:220px; object-fit:cover; transition:transform 0.3s ease; cursor:pointer;" />
-                        <div class="overlay" style="position:absolute; inset:0; background:rgba(0,0,0,0.05); opacity:0; transition:opacity 0.3s; display:flex; justify-content:center; align-items:center; color:#fff; font-weight:500;">
-                            <span>@item.Product.Name</span>
-                        </div>
+                             class="basket-card__img" />
                     </div>
 
-                    <div class="basket-info" style="padding:1rem; flex-grow:1; display:flex; flex-direction:column; justify-content:space-between; gap:0.5rem;">
-                        <h3 style="font-size:1rem; font-weight:600; margin:0;">@item.Product.Name</h3>
-                        <p style="margin:0; color:#555;">Price: £@item.Product.Price</p>
-                        <p style="margin:0; color:#555;">Total: £@(item.Product.Price* item.Quantity)</p>
+                    <div class="basket-card__body">
+                        <h3 class="basket-card__name">@item.Product.Name</h3>
 
-                        <form asp-action="Update" method="post" style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+                        <div class="basket-card__prices">
+                            <span class="basket-card__unit-price">£@item.Product.Price <span class="basket-card__unit-label">each</span></span>
+                            <span class="basket-card__line-total">£@(item.Product.Price* item.Quantity) total</span>
+                        </div>
+
+                        <form asp-action="Update" method="post" class="basket-card__qty-form">
                             <input type="hidden" name="id" value="@item.BasketItemId" />
-                            <input type="number" name="quantity" value="@item.Quantity" min="1" style="width:60px; padding:0.3rem; border-radius:6px; border:1px solid #ccc;" />
-                            <button type="submit" class="btn btn-outline-dark btn-sm" style="border-radius:6px; padding:0.3rem 0.8rem;">Update</button>
+                            <label class="basket-card__qty-label" for="qty-@item.BasketItemId">Qty</label>
+                            <input type="number"
+                                   id="qty-@item.BasketItemId"
+                                   name="quantity"
+                                   value="@item.Quantity"
+                                   min="1"
+                                   class="basket-card__qty-input" />
+                            <button type="submit" class="btn-lwad btn-lwad--sm">Update</button>
                         </form>
 
-                        <a asp-action="RemoveFromBasket" asp-route-basketItemId="@item.BasketItemId" class="btn btn-danger btn-sm" style="margin-top:0.5rem; border-radius:6px; padding:0.3rem 0.8rem;">
-                            Remove
+                        <a asp-action="RemoveFromBasket"
+                           asp-route-basketItemId="@item.BasketItemId"
+                           class="basket-card__remove">
+                            <i class="fas fa-trash-alt"></i> Remove
                         </a>
                     </div>
                 </div>
             }
         </div>
 
-        <div class="basket-summary" style="margin-top:2.5rem; text-align:right;">
-            <h3 style="letter-spacing:1px; font-weight:500; font-size:1.3rem;">
-                Grand Total: £@Model.Items.Sum(i => i.Product.Price * i.Quantity)
-            </h3>
-            <form asp-action="Checkout" method="post" class="btn btn-dark btn-lg" style="border-radius:6px; padding:0.8rem 2rem; text-transform:uppercase; margin-top:1rem;">
-                <button type="submit">Pay with Card</button>
-            </form>
-            <a asp-action ="Checkout" method ="post"class="btn btn-dark btn-lg" style="border-radius:6px; padding:0.8rem 2rem; text-transform:uppercase; margin-top:1rem;">
-                Proceed to Checkout
-            </a>
+        <!-- Summary Bar -->
+        <div class="basket-summary">
+            <div class="basket-summary__total">
+                <span class="basket-summary__label">Grand Total</span>
+                <span class="basket-summary__amount">£@Model.Items.Sum(i => i.Product.Price * i.Quantity)</span>
+            </div>
+            <div class="basket-summary__actions">
+                <form asp-action="Checkout" method="post" class="d-inline">
+                    <button type="submit" class="btn-lwad">Pay with Card</button>
+                </form>
+                <a asp-action="Checkout" class="btn-lwad btn-lwad--outline">Proceed to Checkout</a>
+            </div>
         </div>
     }
 </div>
 
 <style>
-    .basket-card:hover img {
-        transform: scale(1.05);
+    /* ── HERO ── */
+    .basket-hero {
+        padding: 3.5rem 1rem 3rem;
+        text-align: center;
+        background: #fafafa;
+        border-bottom: 1px solid #ebebeb;
     }
 
-    .basket-card:hover .overlay {
-        opacity: 1;
+    .basket-hero__eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+        color: #aaa;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
     }
 
-    @@media (max-width:768px) {
-        .basket-grid
-
-    {
-        grid-template-columns: 1fr;
+    .basket-hero__title {
+        font-size: 2.2rem;
+        font-weight: 300;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
     }
 
+    .basket-hero__sub {
+        color: #999;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* ── CONTAINER ── */
+    .basket-container {
+        max-width: 1100px;
+        padding: 3rem 1rem 5rem;
+    }
+
+    /* ── EMPTY STATE ── */
+    .basket-empty {
+        text-align: center;
+        padding: 4rem 1rem;
+    }
+
+    .basket-empty__icon {
+        font-size: 3rem;
+        color: #ddd;
+        display: block;
+        margin-bottom: 1.5rem;
+    }
+
+    .basket-empty__msg {
+        color: #888;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* ── SHARED BUTTON ── */
+    .btn-lwad {
+        display: inline-block;
+        background: #000;
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 0.85rem 2.2rem;
+        border: 1px solid #000;
+        border-radius: 0;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+
+        .btn-lwad:hover {
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+        }
+
+    .btn-lwad--outline {
+        background: #fff;
+        color: #000;
+    }
+
+        .btn-lwad--outline:hover {
+            background: #000;
+            color: #fff;
+        }
+
+    .btn-lwad--sm {
+        padding: 0.4rem 1rem;
+        font-size: 0.75rem;
+    }
+
+    /* ── PRODUCT GRID ── */
+    .basket-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.75rem;
+    }
+
+    /* ── PRODUCT CARD ── */
+    .basket-card {
+        background: #fff;
+        border: 1px solid #ebebeb;
+        display: flex;
+        flex-direction: column;
+        transition: box-shadow 0.25s;
+    }
+
+        .basket-card:hover {
+            box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+        }
+
+    .basket-card__img-wrap {
+        overflow: hidden;
+    }
+
+    .basket-card__img {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+    .basket-card:hover .basket-card__img {
+        transform: scale(1.04);
+    }
+
+    .basket-card__body {
+        padding: 1.2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .basket-card__name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: 0.3px;
+    }
+
+    .basket-card__prices {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: 0.9rem;
+    }
+
+    .basket-card__unit-price {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .basket-card__unit-label {
+        font-size: 0.75rem;
+        color: #aaa;
+        font-weight: 400;
+    }
+
+    .basket-card__line-total {
+        color: #000;
+        font-weight: 600;
+    }
+
+    /* Quantity Form */
+    .basket-card__qty-form {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .basket-card__qty-label {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        margin: 0;
+    }
+
+    .basket-card__qty-input {
+        width: 60px;
+        padding: 0.35rem 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0;
+        font-size: 0.9rem;
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+        .basket-card__qty-input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+    /* Remove Link */
+    .basket-card__remove {
+        font-size: 0.78rem;
+        color: #c0392b;
+        text-decoration: none;
+        letter-spacing: 0.5px;
+        margin-top: auto;
+        align-self: flex-start;
+        transition: color 0.2s;
+    }
+
+        .basket-card__remove:hover {
+            color: #922b21;
+            text-decoration: underline;
+        }
+
+    /* ── SUMMARY BAR ── */
+    .basket-summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 3rem;
+        padding: 2rem 2.5rem;
+        background: #fafafa;
+        border: 1px solid #ebebeb;
+    }
+
+    .basket-summary__total {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .basket-summary__label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #aaa;
+    }
+
+    .basket-summary__amount {
+        font-size: 1.8rem;
+        font-weight: 300;
+        letter-spacing: 1px;
+        color: #000;
+    }
+
+    .basket-summary__actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    /* ── RESPONSIVE ── */
+    @@media (max-width: 768px) {
+        .basket-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .basket-summary {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1.5rem;
+        }
+
+        .basket-summary__actions {
+            width: 100%;
+        }
+
+        .btn-lwad {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>
