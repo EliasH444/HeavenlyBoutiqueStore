@@ -1,9 +1,12 @@
 ﻿using learning.Data;
 using learning.Models;
 using learning.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Stripe;
 using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
@@ -16,11 +19,17 @@ namespace learning.Controllers
     {
         private readonly learningContext _context;
         private readonly IUserService _userService;
+        private readonly StripeSettings _stripeSettings;
+        private readonly IEmailService _emailService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BasketsController(learningContext context, IUserService UserService)
+        public BasketsController(learningContext context, IUserService UserService, IOptions<StripeSettings> stripeSettings,IEmailService emailService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userService = UserService;
+            _stripeSettings = stripeSettings.Value;
+            _emailService = emailService;
+            _userManager = userManager;
         }
 
         // View basket
@@ -149,6 +158,9 @@ namespace learning.Controllers
             if (basket == null || !basket.Items.Any())
                 return RedirectToAction("ViewBasket");
 
+            // ⚠️ SET THE STRIPE API KEY HERE
+            StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+
             // Map basket items to Stripe line items
             var lineItems = basket.Items.Select(i => new SessionLineItemOptions
             {
@@ -174,9 +186,8 @@ namespace learning.Controllers
             };
 
             var service = new SessionService();
-            var session = service.Create(options);
+            var session = service.Create(options); // ✅ Now it will work
 
-            // Redirect to Stripe Checkout
             return Redirect(session.Url);
         }
 
@@ -217,9 +228,22 @@ namespace learning.Controllers
             _context.BasketItem.RemoveRange(basket.Items);
             await _context.SaveChangesAsync();
 
+            // ===== SEND ORDER CONFIRMATION EMAIL =====
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            var userEmail = await _userManager.GetEmailAsync(user); // Implement this if not already
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                var subject = "Order Confirmation - Your Store";
+                var body = $"Hello {userEmail},<br/><br/>" +
+                           $"Thank you for your order! Your order ID is <b>{purchase.PurchaseID}</b>.<br/>" +
+                           $"Order Total: £{purchase.TotalAmount:F2}<br/><br/>" +
+                           $"Items:<br/>" +
+                           string.Join("<br/>", purchase.Items.Select(i => $"{i.ProductName} x{i.Quantity} - £{i.Price * i.Quantity:F2}")) +
+                           "<br/><br/>We appreciate your business!";
+
+                await _emailService.SendEmailAsync(userEmail, subject, body);
+            }
             return View(purchase);
         }
-
-
     }
 }

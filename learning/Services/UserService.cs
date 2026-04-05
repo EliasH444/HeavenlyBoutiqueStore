@@ -21,5 +21,6 @@ namespace learning.Services
         {
             return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         }
+
     }
 }
