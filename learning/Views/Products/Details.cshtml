@@ -13,18 +13,50 @@
 
 <div class="container product-details-modern">
     <div class="product-card">
-        <!-- Left: Image -->
-        <div class="product-image">
-            <img src="@Model.PrimaryImageUrl" alt="@Model.Name" />
+
+        <!-- LEFT: IMAGE GALLERY -->
+        <div class="product-image-gallery">
+
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                <!-- MAIN IMAGE -->
+                <div class="main-image">
+                    <img id="mainProductImage"
+                         src="@Model.Images.FirstOrDefault(i => i.IsPrimary)?.Url
+                                  ?? Model.Images.First().Url"
+                         alt="@Model.Name" />
+                </div>
+
+                <!-- THUMBNAILS -->
+                <div class="thumbnail-row">
+                    @foreach (var img in Model.Images)
+                    {
+                        <img src="@img.Url"
+                             class="thumb"
+                             onclick="document.getElementById('mainProductImage').src='@img.Url'" />
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="main-image">
+                    <img src="@Model.PrimaryImageUrl" alt="@Model.Name" />
+                </div>
+            }
+
         </div>
 
-        <!-- Right: Info -->
+        <!-- RIGHT: PRODUCT INFO -->
         <div class="product-info">
             <h2>@Model.Name</h2>
             <p class="price">£@Model.Price</p>
             <p class="description">@Model.Description</p>
 
-            <form asp-controller="Baskets" asp-action="AddToBasket" method="post" class="basket-form">
+            <form asp-controller="Baskets"
+                  asp-action="AddToBasket"
+                  method="post"
+                  class="basket-form">
+
                 <input type="hidden" name="productId" value="@Model.ProductId" />
 
                 <div class="quantity-wrapper">
@@ -51,7 +83,6 @@
 </div>
 
 <style>
-    /* --- GENERAL --- */
     body {
         font-family: 'Montserrat', sans-serif;
         color: #333;
@@ -59,7 +90,7 @@
         background: #fdfdfd;
     }
 
-    /* --- HERO --- */
+    /* HERO */
     .product-hero {
         background: #fafafa;
         padding: 2rem 0;
@@ -78,7 +109,7 @@
             color: #888;
         }
 
-    /* --- PRODUCT CARD --- */
+    /* LAYOUT */
     .product-details-modern {
         max-width: 1100px;
         margin: 2rem auto;
@@ -95,30 +126,50 @@
         overflow: hidden;
     }
 
-    /* --- IMAGE --- */
-    .product-image {
+    /* IMAGE SECTION */
+    .product-image-gallery {
         flex: 1 1 400px;
         min-width: 300px;
-        background: #f5f5f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 1rem;
     }
 
-        .product-image img {
-            width: 100%;
-            height: auto;
-            max-height: 600px;
-            object-fit: cover;
-            transition: transform 0.3s;
-            cursor: zoom-in;
+    .main-image img {
+        width: 100%;
+        max-height: 600px;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: zoom-in;
+        transition: transform 0.3s;
+    }
+
+        .main-image img:hover {
+            transform: scale(1.02);
         }
 
-            .product-image img:hover {
-                transform: scale(1.05);
-            }
+    /* THUMBNAILS */
+    .thumbnail-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
 
-    /* --- INFO --- */
+    .thumb {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: 0.2s;
+    }
+
+        .thumb:hover {
+            border: 2px solid #111;
+            transform: scale(1.05);
+        }
+
+    /* INFO */
     .product-info {
         flex: 1 1 350px;
         padding: 2rem;
@@ -136,7 +187,6 @@
     .price {
         font-size: 1.3rem;
         font-weight: 500;
-        color: #222;
     }
 
     .description {
@@ -145,30 +195,15 @@
         color: #555;
     }
 
-    /* --- FORM --- */
+    /* BUTTONS */
     .basket-form {
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        margin-top: 1rem;
     }
 
-    .quantity-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-        .quantity-wrapper input {
-            width: 70px;
-            padding: 0.3rem 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-    /* --- BUTTONS --- */
     .btn-add {
-        padding: 0.8rem 0;
+        padding: 0.8rem;
         background: #111;
         color: #fff;
         border: none;
@@ -176,7 +211,6 @@
         text-transform: uppercase;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s;
     }
 
         .btn-add:hover {
@@ -184,16 +218,12 @@
         }
 
     .btn-back {
-        display: inline-block;
-        text-align: center;
-        margin-top: 0.5rem;
-        padding: 0.6rem 0;
+        padding: 0.6rem;
         border: 1px solid #111;
+        text-align: center;
+        text-decoration: none;
         color: #111;
         border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        transition: all 0.3s;
     }
 
         .btn-back:hover {
@@ -201,24 +231,14 @@
             color: #fff;
         }
 
-    /* --- META --- */
-    .product-meta {
-        font-size: 0.85rem;
-        color: #777;
-        margin-top: 1.5rem;
-    }
-
-    /* --- RESPONSIVE --- */
+    /* RESPONSIVE */
     @@media (max-width: 768px) {
-        .product-card
+        .product-card {
+            flex-direction: column;
+        }
 
-    {
-        flex-direction: column;
-    }
-
-    .product-image img {
-        max-height: 400px;
-    }
-
+        .main-image img {
+            max-height: 400px;
+        }
     }
 </style>

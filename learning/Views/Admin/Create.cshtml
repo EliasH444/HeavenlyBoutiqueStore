@@ -8,37 +8,37 @@
 <h2>Create Product</h2>
 
 <div class="form-container">
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
 
-        <!-- Name -->
+        <!-- NAME -->
         <div class="form-group">
             <label asp-for="Name"></label>
             <input asp-for="Name" class="form-input" required />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
-        <!-- Description -->
+        <!-- DESCRIPTION -->
         <div class="form-group">
             <label asp-for="Description"></label>
             <textarea asp-for="Description" class="form-input" rows="4"></textarea>
         </div>
 
-        <!-- Price -->
+        <!-- PRICE -->
         <div class="form-group">
             <label asp-for="Price"></label>
             <input asp-for="Price" type="number" step="0.01" class="form-input" required />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
-        <!-- Stock -->
+        <!-- STOCK -->
         <div class="form-group">
             <label asp-for="StockQuantity"></label>
             <input asp-for="StockQuantity" type="number" class="form-input" required />
             <span asp-validation-for="StockQuantity" class="text-danger"></span>
         </div>
 
-        <!-- Category -->
+        <!-- CATEGORY -->
         <div class="form-group">
             <label asp-for="CategoryId">Category</label>
             <select asp-for="CategoryId" class="form-input" required>
@@ -51,16 +51,44 @@
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
 
-        <!-- Images (multiple URLs) -->
+        <!-- FILE UPLOAD (MULTIPLE IMAGES) -->
         <div class="form-group">
-            <label>Product Images (comma separated URLs)</label>
-            <textarea name="ImageUrls" class="form-input" rows="3"
-                      placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
-            <small class="text-muted">The first URL will be the primary image.</small>
+            <label>Upload Images</label>
+
+            <input type="file"
+                   name="images"
+                   multiple="multiple"
+                   accept="image/*"
+                   class="form-input"
+                   id="imageUpload" />
+
+            <small class="text-muted">
+                You can select multiple images (hold Ctrl or Shift). First image will be primary if no URLs are provided.
+            </small>
+
+            <!-- PREVIEW SELECTED FILES -->
+            <div id="file-preview"
+                 style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+            </div>
         </div>
 
-        <!-- Live Image Preview -->
-        <div id="preview-container" style="display:flex; gap:10px; margin-top:10px;"></div>
+        <!-- IMAGE URLS -->
+        <div class="form-group">
+            <label>Image URLs (comma separated)</label>
+            <textarea name="imageUrls"
+                      class="form-input"
+                      rows="3"
+                      placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"></textarea>
+
+            <small class="text-muted">
+                Optional fallback. These will be used if no uploaded files are provided.
+            </small>
+        </div>
+
+        <!-- URL PREVIEW -->
+        <div id="url-preview"
+             style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+        </div>
 
         <button type="submit" class="submit-btn">Create Product</button>
         <a href="@Url.Action("Index", "Admin")" class="back-btn">Back</a>
@@ -71,19 +99,60 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        const textarea = document.querySelector('[name="ImageUrls"]');
-        const previewContainer = document.getElementById('preview-container');
+        // =========================
+        // FILE UPLOAD PREVIEW
+        // =========================
+        const fileInput = document.getElementById("imageUpload");
+        const filePreview = document.getElementById("file-preview");
+
+        fileInput.addEventListener("change", function () {
+            filePreview.innerHTML = "";
+
+            const files = Array.from(this.files);
+
+            files.forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.width = "100px";
+                    img.style.height = "100px";
+                    img.style.objectFit = "cover";
+                    img.style.border = "1px solid #ccc";
+                    img.style.borderRadius = "6px";
+
+                    filePreview.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // =========================
+        // URL PREVIEW (your existing logic improved)
+        // =========================
+        const textarea = document.querySelector('[name="imageUrls"]');
+        const urlPreview = document.getElementById('url-preview');
 
         textarea.addEventListener('input', () => {
-            previewContainer.innerHTML = '';
-            const urls = textarea.value.split(',').map(u => u.trim()).filter(u => u);
+            urlPreview.innerHTML = '';
+
+            const urls = textarea.value
+                .split(',')
+                .map(u => u.trim())
+                .filter(u => u.length > 0);
+
             urls.forEach(url => {
                 const img = document.createElement('img');
                 img.src = url;
-                img.style.maxWidth = '100px';
-                img.style.maxHeight = '100px';
+                img.style.width = '100px';
+                img.style.height = '100px';
                 img.style.objectFit = 'cover';
-                previewContainer.appendChild(img);
+                img.style.border = '1px solid #ccc';
+                img.style.borderRadius = '6px';
+
+                urlPreview.appendChild(img);
             });
         });
     </script>
