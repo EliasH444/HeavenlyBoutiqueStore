@@ -36,6 +36,7 @@ namespace learning.Controllers
             }
 
             var product = await _context.Product
+                .Include(p => p.Images)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {

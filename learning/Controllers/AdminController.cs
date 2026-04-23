@@ -42,8 +42,10 @@ namespace learning.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product, List<IFormFile>? images)
         {
+            Console.WriteLine("Create Post called ");
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("shit");
                 ViewBag.Categories = _context.Category.ToList();
                 return View(product);
             }

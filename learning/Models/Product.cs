@@ -17,7 +17,7 @@ namespace learning.Models
 
         // FK
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         // Replaces ImageUrl
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
