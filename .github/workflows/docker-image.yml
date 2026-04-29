@@ -1,7 +1,7 @@
 name: Build and Push Docker Image
 
-on:[push]
-  
+on:
+  push:
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. Set image name (LOWERCASE SAFE)
+      # 3. Set image name (safe lowercase)
       - name: Set image name
         run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:latest" >> $GITHUB_ENV
 
