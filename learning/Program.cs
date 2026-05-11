@@ -49,9 +49,11 @@ async Task SeedAdminUserAsync()
         await roleManager.CreateAsync(new IdentityRole(adminRoleName));
 
     // Create admin user
-    var adminEmail = "shadiaH444@outlook.com";
-    var adminPassword = "Admin123!";
-    var FullName = "Shadia Hassan";
+    var adminConfig = builder.Configuration.GetSection("AdminUser");
+
+    var adminEmail = adminConfig["Email"];
+    var adminPassword = adminConfig["Password"];
+    var FullName = adminConfig["FullName"];
 
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
