@@ -1,22 +1,76 @@
 # =========================
-# 🔐 Secrets & Config Files
+# 🔧 Visual Studio / IDE
 # =========================
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
-# App settings (DO NOT COMMIT REAL VALUES)
-appsettings.json
-appsettings.Development.json
-appsettings.Production.json
+# =========================
+# 🏗️ Build output (IMPORTANT)
+# =========================
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# =========================
+# 🧪 Test & logs
+# =========================
+TestResults/
+*.log
+
+# =========================
+# 📦 NuGet / Packages
+# =========================
+*.nupkg
+*.snupkg
+packages/
+**/packages/*
+
+# =========================
+# 🌐 ASP.NET / publish
+# =========================
+publish/
+*.publish.xml
+*.azurePubxml
+PublishScripts/
+
+# =========================
+# 🔐 Secrets & config (IMPORTANT)
+# =========================
 
 # Environment variables
 .env
 .env.*
 
-# Secret storage
+# Secrets storage
 secrets.json
 
 # Local overrides
 *.local.json
 
-# IDE (optional)
-.vscode/
-.idea/
+# Environment-specific config (DO NOT COMMIT)
+appsettings.Development.json
+appsettings.Production.json
+
+# =========================
+# 🧾 Database files (optional safety)
+# =========================
+*.mdf
+*.ldf
+*.sqlite
+
+# =========================
+# 🧠 Misc system / tooling
+# =========================
+Thumbs.db
+.DS_Store
+*.cache
