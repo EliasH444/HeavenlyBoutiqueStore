@@ -29,7 +29,7 @@
             @foreach (var product in Model)
             {
                 <a href="/Products/Details/@product.ProductId" class="product-card">
-                    <img src="@(string.IsNullOrEmpty(product.PrimaryImageUrl) ? "/images/placeholder.png" : product.PrimaryImageUrl)" alt="@product.Name" class="product-image" />
+                    <img src="@product.PrimaryImageUrl" alt="@product.Name" class="product-image" onerror="this.onerror=null;this.src='/images/placeholder.jpg'" />
                     <div class="product-overlay">
                         <h3>@product.Name</h3>
                         <p>£@product.Price</p>

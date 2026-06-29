@@ -17,30 +17,31 @@
         <!-- LEFT: IMAGE GALLERY -->
         <div class="product-image-gallery">
 
-            @if (Model.Images != null && Model.Images.Any())
-            {
-                <!-- MAIN IMAGE -->
-                <div class="main-image">
-                    <img id="mainProductImage"
-                         src="@Model.Images.FirstOrDefault(i => i.IsPrimary)?.Url
-                                  ?? Model.Images.First().Url"
-                         alt="@Model.Name" />
-                </div>
+            @{
+                var sortedImages = Model.Images?.OrderBy(i => i.DisplayOrder).ToList() ?? new List<learning.Models.ProductImage>();
+                var mainImageUrl = (Model.Images?.FirstOrDefault(i => i.IsPrimary) ?? Model.Images?.FirstOrDefault())?.Url ?? "/images/placeholder.jpg";
+            }
 
+            <!-- MAIN IMAGE -->
+            <div class="main-image">
+                <img id="mainProductImage"
+                     src="@mainImageUrl"
+                     alt="@Model.Name"
+                     onerror="this.onerror=null;this.src='/images/placeholder.jpg'" />
+            </div>
+
+            @if (sortedImages.Any())
+            {
                 <!-- THUMBNAILS -->
                 <div class="thumbnail-row">
-                    @foreach (var img in Model.Images)
+                    @foreach (var img in sortedImages)
                     {
                         <img src="@img.Url"
-                             class="thumb"
-                             onclick="document.getElementById('mainProductImage').src='@img.Url'" />
+                             class="thumb @(img.Url == mainImageUrl ? "thumb-active" : "")"
+                             alt="@Model.Name"
+                             onerror="this.onerror=null;this.src='/images/placeholder.jpg'"
+                             onclick="setMainImage(this, '@img.Url')" />
                     }
-                </div>
-            }
-            else
-            {
-                <div class="main-image">
-                    <img src="@Model.PrimaryImageUrl" alt="@Model.Name" />
                 </div>
             }
 
@@ -169,6 +170,10 @@
             transform: scale(1.05);
         }
 
+    .thumb.thumb-active {
+            border: 2px solid #111;
+        }
+
     /* INFO */
     .product-info {
         flex: 1 1 350px;
@@ -242,3 +247,11 @@
         }
     }
 </style>
+
+<script>
+    function setMainImage(thumb, url) {
+        document.getElementById('mainProductImage').src = url;
+        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('thumb-active'));
+        thumb.classList.add('thumb-active');
+    }
+</script>
